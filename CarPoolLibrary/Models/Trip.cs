@@ -5,16 +5,18 @@ namespace CarPoolLibrary.Models;
 
 public class Trip
 {
-    [Key]
+    [Key, Column(Order = 0)]
     [Required]
     public int TripId { get; set; }
 
-    [Key]
+    [Key, Column(Order = 1)]
     [Required]
-    public int? VehicleId { get; set; }
+    public int VehicleId { get; set; }
 
+    [Required]
     public DateOnly? Date { get; set; }
 
+    [Required]
     public TimeOnly? Time { get; set; }
 
     public string? Destination { get; set; }
