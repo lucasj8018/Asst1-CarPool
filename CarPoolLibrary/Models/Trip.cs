@@ -11,7 +11,7 @@ public class Trip
 
     [Key]
     [Required]
-    public string? VehicleId { get; set; }
+    public int? VehicleId { get; set; }
 
     public DateOnly? Date { get; set; }
 

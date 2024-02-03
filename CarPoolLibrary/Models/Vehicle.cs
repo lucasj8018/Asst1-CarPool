@@ -13,9 +13,9 @@ public class Vehicle
 
     public string? Make { get; set; }
 
-    public string? Year { get; set; }
+    public int? Year { get; set; }
 
-    public string? NumberOfSeats { get; set; }
+    public int? NumberOfSeats { get; set; }
 
     public string? VehicleType { get; set; }
 
