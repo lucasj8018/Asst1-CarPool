@@ -9,7 +9,7 @@ public class Trip
     [Required]
     public int TripId { get; set; }
 
-    [Key, Column(Order = 1)]
+    [Column(Order = 1)]
     [Required]
     public int VehicleId { get; set; }
 
@@ -19,8 +19,10 @@ public class Trip
     [Required]
     public TimeOnly? Time { get; set; }
 
+    [Display(Name = "Destination Adress")]
     public string? Destination { get; set; }
 
+    [Display(Name = "Meeting Address")]
     public string? MeetingAddress { get; set; }
 
     public DateTime? Created { get; set; }

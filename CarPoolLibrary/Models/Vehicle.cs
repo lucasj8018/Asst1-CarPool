@@ -9,10 +9,13 @@ public class Vehicle
     [Required]
     public int VehicleId { get; set; }
 
+    [Required]
     public string? Model { get; set; }
 
+    [Required]
     public string? Make { get; set; }
 
+    [Required]
     public int? Year { get; set; }
 
     public int? NumberOfSeats { get; set; }
@@ -21,13 +24,13 @@ public class Vehicle
 
     public int? MemberId { get; set; }
 
-    public DateTime? Created { get; set; }
+    public DateTime? Created { get; set; } = DateTime.Now;
 
-    public DateTime? Modified { get; set; }
+    public DateTime? Modified { get; set; } = DateTime.Now;
 
-    public string? CreatedBy { get; set; }
+    public string? CreatedBy { get; set; } = "System";
 
-    public string? ModifiedBy { get; set; }
+    public string? ModifiedBy { get; set; } = "System";
 
     [ForeignKey("MemberId")]
     public Member? Member { get; set; }

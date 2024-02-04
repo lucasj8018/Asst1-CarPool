@@ -9,7 +9,7 @@ public class Manifest
     [Required]
     public int ManifestId { get; set; }
 
-    [Key, Column(Order = 1)]
+    [Column(Order = 1)]
     [Required]
     public int MemberId { get; set; }
 
@@ -17,13 +17,13 @@ public class Manifest
 
     public string? Notes { get; set; }
 
-    public DateTime? Created { get; set; }
+    public DateTime? Created { get; set; } = DateTime.Now;
 
-    public DateTime? Modified { get; set; }
+    public DateTime? Modified { get; set; } = DateTime.Now;
 
-    public string? CreatedBy { get; set; }
+    public string? CreatedBy { get; set; } = "System";
 
-    public string? ModifiedBy { get; set; }
+    public string? ModifiedBy { get; set; } = "System";
 
     [ForeignKey("MemberId")]
     public Member? Member { get; set; }
