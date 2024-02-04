@@ -22,7 +22,7 @@ namespace CarPoolMvc.Controllers
         // GET: Vehicles
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Vehicles.Include(v => v.Member);
+            var applicationDbContext = _context.Vehicles!.Include(v => v.Member);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace CarPoolMvc.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicles
+            var vehicle = await _context.Vehicles!
                 .Include(v => v.Member)
                 .FirstOrDefaultAsync(m => m.VehicleId == id);
             if (vehicle == null)
@@ -77,7 +77,7 @@ namespace CarPoolMvc.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicles.FindAsync(id);
+            var vehicle = await _context.Vehicles!.FindAsync(id);
             if (vehicle == null)
             {
                 return NotFound();
@@ -130,7 +130,7 @@ namespace CarPoolMvc.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicles
+            var vehicle = await _context.Vehicles!
                 .Include(v => v.Member)
                 .FirstOrDefaultAsync(m => m.VehicleId == id);
             if (vehicle == null)
@@ -146,7 +146,7 @@ namespace CarPoolMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vehicle = await _context.Vehicles.FindAsync(id);
+            var vehicle = await _context.Vehicles!.FindAsync(id);
             if (vehicle != null)
             {
                 _context.Vehicles.Remove(vehicle);
@@ -158,7 +158,7 @@ namespace CarPoolMvc.Controllers
 
         private bool VehicleExists(int id)
         {
-            return _context.Vehicles.Any(e => e.VehicleId == id);
+            return _context.Vehicles!.Any(e => e.VehicleId == id);
         }
     }
 }

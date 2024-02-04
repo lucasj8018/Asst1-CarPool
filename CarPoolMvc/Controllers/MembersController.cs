@@ -22,7 +22,7 @@ namespace CarPoolMvc.Controllers
         // GET: Members
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Members.ToListAsync());
+            return View(await _context.Members!.ToListAsync());
         }
 
         // GET: Members/Details/5
@@ -33,7 +33,7 @@ namespace CarPoolMvc.Controllers
                 return NotFound();
             }
 
-            var member = await _context.Members
+            var member = await _context.Members!
                 .FirstOrDefaultAsync(m => m.MemberId == id);
             if (member == null)
             {
@@ -73,7 +73,7 @@ namespace CarPoolMvc.Controllers
                 return NotFound();
             }
 
-            var member = await _context.Members.FindAsync(id);
+            var member = await _context.Members!.FindAsync(id);
             if (member == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace CarPoolMvc.Controllers
                 return NotFound();
             }
 
-            var member = await _context.Members
+            var member = await _context.Members!
                 .FirstOrDefaultAsync(m => m.MemberId == id);
             if (member == null)
             {
@@ -139,7 +139,7 @@ namespace CarPoolMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var member = await _context.Members.FindAsync(id);
+            var member = await _context.Members!.FindAsync(id);
             if (member != null)
             {
                 _context.Members.Remove(member);
@@ -151,7 +151,7 @@ namespace CarPoolMvc.Controllers
 
         private bool MemberExists(int id)
         {
-            return _context.Members.Any(e => e.MemberId == id);
+            return _context.Members!.Any(e => e.MemberId == id);
         }
     }
 }
