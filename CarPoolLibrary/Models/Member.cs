@@ -14,6 +14,7 @@ public class Member
     [EmailAddress]
     public string? Email { get; set; }
 
+    [Phone]
     public string? Mobile { get; set; }
 
     public string? Street { get; set; }
