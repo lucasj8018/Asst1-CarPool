@@ -20,18 +20,17 @@ namespace CarPoolMvc.Data.Migrations
             modelBuilder.Entity("CarPoolLibrary.Models.Manifest", b =>
                 {
                     b.Property<int>("ManifestId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnOrder(0);
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnOrder(1);
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("Modified")
                         .HasColumnType("TEXT");
@@ -43,11 +42,15 @@ namespace CarPoolMvc.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("TripId")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("ManifestId", "MemberId");
+                    b.HasKey("ManifestId");
 
                     b.HasIndex("MemberId");
+
+                    b.HasIndex("ManifestId", "MemberId")
+                        .IsUnique();
 
                     b.ToTable("Manifest", (string)null);
 
@@ -55,10 +58,10 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             ManifestId = 1,
-                            MemberId = 1,
-                            Created = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1448),
+                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6347),
                             CreatedBy = "System",
-                            Modified = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1450),
+                            MemberId = 1,
+                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6349),
                             ModifiedBy = "System",
                             Notes = "I will be driving to work",
                             TripId = 1
@@ -66,10 +69,10 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             ManifestId = 2,
-                            MemberId = 2,
-                            Created = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1455),
+                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6359),
                             CreatedBy = "System",
-                            Modified = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1457),
+                            MemberId = 2,
+                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6360),
                             ModifiedBy = "System",
                             Notes = "I will be driving to work",
                             TripId = 2
@@ -77,10 +80,10 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             ManifestId = 3,
-                            MemberId = 3,
-                            Created = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1459),
+                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6362),
                             CreatedBy = "System",
-                            Modified = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1460),
+                            MemberId = 3,
+                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6363),
                             ModifiedBy = "System",
                             Notes = "I will be driving to work",
                             TripId = 3
@@ -142,13 +145,13 @@ namespace CarPoolMvc.Data.Migrations
                             MemberId = 1,
                             City = "Richmond",
                             Country = "Canada",
-                            Created = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1061),
+                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5898),
                             CreatedBy = "System",
                             Email = "sam@fox.com",
                             FirstName = "Sam",
                             LastName = "Fox",
                             Mobile = "778-111-2222",
-                            Modified = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1103),
+                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5938),
                             ModifiedBy = "System",
                             PostalCode = "V4F 1M7",
                             Street = "457 Fox Avenue"
@@ -158,13 +161,13 @@ namespace CarPoolMvc.Data.Migrations
                             MemberId = 2,
                             City = "Delta",
                             Country = "Canada",
-                            Created = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1113),
+                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5948),
                             CreatedBy = "System",
                             Email = "ann@day.com",
                             FirstName = "Ann",
                             LastName = "Day",
                             Mobile = "604-333-6666",
-                            Modified = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1114),
+                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5949),
                             ModifiedBy = "System",
                             PostalCode = "V6G 1M6",
                             Street = "231 Reiver Road"
@@ -174,13 +177,13 @@ namespace CarPoolMvc.Data.Migrations
                             MemberId = 3,
                             City = "Delta",
                             Country = "Canada",
-                            Created = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1118),
+                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5953),
                             CreatedBy = "System",
                             Email = "lucas@jian.com",
                             FirstName = "Lucas",
                             LastName = "Jian",
                             Mobile = "604-333-6666",
-                            Modified = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1119),
+                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5954),
                             ModifiedBy = "System",
                             PostalCode = "V6G 1M6",
                             Street = "231 Reiver Road"
@@ -190,12 +193,8 @@ namespace CarPoolMvc.Data.Migrations
             modelBuilder.Entity("CarPoolLibrary.Models.Trip", b =>
                 {
                     b.Property<int>("TripId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnOrder(0);
-
-                    b.Property<int>("VehicleId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnOrder(1);
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("TEXT");
@@ -223,9 +222,15 @@ namespace CarPoolMvc.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("TripId", "VehicleId");
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("TripId");
 
                     b.HasIndex("VehicleId");
+
+                    b.HasIndex("TripId", "VehicleId")
+                        .IsUnique();
 
                     b.ToTable("Trip", (string)null);
 
@@ -233,29 +238,29 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             TripId = 1,
-                            VehicleId = 1,
                             Date = new DateOnly(2024, 2, 2),
                             Destination = "123 Marine Drive, Burnaby",
                             MeetingAddress = "1123 River Road, Coquitlam",
-                            Time = new TimeOnly(12, 0, 0)
+                            Time = new TimeOnly(12, 0, 0),
+                            VehicleId = 1
                         },
                         new
                         {
                             TripId = 2,
-                            VehicleId = 2,
                             Date = new DateOnly(2024, 2, 3),
                             Destination = "231 Boundary Road, Vancouver",
                             MeetingAddress = "345 King George Highway, Surrey",
-                            Time = new TimeOnly(8, 0, 0)
+                            Time = new TimeOnly(8, 0, 0),
+                            VehicleId = 2
                         },
                         new
                         {
                             TripId = 3,
-                            VehicleId = 3,
                             Date = new DateOnly(2024, 2, 4),
                             Destination = "12345 Lougheed Highway, Coquitlam",
                             MeetingAddress = "540 Oliver Road, Richmond",
-                            Time = new TimeOnly(15, 0, 0)
+                            Time = new TimeOnly(15, 0, 0),
+                            VehicleId = 3
                         });
                 });
 
@@ -308,12 +313,12 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             VehicleId = 1,
-                            Created = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1162),
+                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5997),
                             CreatedBy = "System",
                             Make = "Ford",
                             MemberId = 1,
                             Model = "Escort",
-                            Modified = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1164),
+                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5999),
                             ModifiedBy = "System",
                             NumberOfSeats = 5,
                             VehicleType = "Sedan",
@@ -322,12 +327,12 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             VehicleId = 2,
-                            Created = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1175),
+                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6006),
                             CreatedBy = "System",
                             Make = "Kia",
                             MemberId = 2,
                             Model = "Soul",
-                            Modified = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1176),
+                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6008),
                             ModifiedBy = "System",
                             NumberOfSeats = 5,
                             VehicleType = "Compact",
@@ -336,12 +341,12 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             VehicleId = 3,
-                            Created = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1179),
+                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6011),
                             CreatedBy = "System",
                             Make = "Honda",
                             MemberId = 3,
                             Model = "Odyssey",
-                            Modified = new DateTime(2024, 2, 4, 8, 43, 4, 813, DateTimeKind.Local).AddTicks(1180),
+                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6012),
                             ModifiedBy = "System",
                             NumberOfSeats = 8,
                             VehicleType = "Minivan",
