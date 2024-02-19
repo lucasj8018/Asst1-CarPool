@@ -1,17 +1,103 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using CarPoolLibrary.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarPoolMvc.Data;
+namespace CarPoolLibrary.Data;
 
 public static class SeedData
 {
-    // this is an extension method to the ModelBuilder class
     public static void Seed(this ModelBuilder modelBuilder)
     {
+        var pwd = "P@$$w0rd";
+        var passwordHasher = new PasswordHasher<User>();
+
+        var adminRole = new Role("Admin");
+        adminRole.NormalizedName = adminRole.Name!.ToUpper();
+        adminRole.Description = "Administrator Role";
+
+        var ownerRole = new Role("Owner");
+        ownerRole.NormalizedName = ownerRole.Name!.ToUpper();
+        ownerRole.Description = "Owner Role";
+
+        var passengerRole = new Role("Passenger");
+        passengerRole.NormalizedName = passengerRole.Name!.ToUpper();
+        passengerRole.Description = "Passenger Role";
+
+        List<Role> roles = new List<Role>(){
+            adminRole,
+            ownerRole,
+            passengerRole
+        };
+
+        modelBuilder.Entity<Role>().HasData(roles);
+
+        var adminUser = new User
+        {
+            Id = Guid.NewGuid().ToString(),
+            UserName = "a@a.a",
+            Email = "a@a.a",
+            EmailConfirmed = true,
+            FirstName = "Admin",
+            LastName = "Admin"
+        };
+        adminUser.NormalizedUserName = adminUser.Email.ToUpper();
+        adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, pwd);
+
+        var ownerUser = new User
+        {
+            Id = Guid.NewGuid().ToString(),
+            UserName = "o@o.o",
+            Email = "o@o.o",
+            EmailConfirmed = true,
+            FirstName = "Owner",
+            LastName = "Owner"
+        };
+        ownerUser.NormalizedUserName = ownerUser.Email.ToUpper();
+        ownerUser.PasswordHash = passwordHasher.HashPassword(ownerUser, pwd);
+
+        var passengerUser = new User
+        {
+            Id = Guid.NewGuid().ToString(),
+            UserName = "p@p.p",
+            Email = "p@p.p",
+            EmailConfirmed = true,
+            FirstName = "Passenger",
+            LastName = "Passenger"
+        };
+        passengerUser.NormalizedUserName = passengerUser.Email.ToUpper();
+        passengerUser.PasswordHash = passwordHasher.HashPassword(passengerUser, pwd);
+
+        List<User> users = new List<User>(){
+            adminUser,
+            ownerUser,
+            passengerUser
+        };
+
+        modelBuilder.Entity<User>().HasData(users);
+
+        List<IdentityUserRole<string>> userRoles = new List<IdentityUserRole<string>>();
+
+        userRoles.Add(new IdentityUserRole<string>
+        {
+            UserId = users[0].Id,
+            RoleId = roles.First(q => q.Name == "Admin").Id
+        });
+
+        userRoles.Add(new IdentityUserRole<string>
+        {
+            UserId = users[1].Id,
+            RoleId = roles.First(q => q.Name == "Owner").Id
+        });
+
+        userRoles.Add(new IdentityUserRole<string>
+        {
+            UserId = users[2].Id,
+            RoleId = roles.First(q => q.Name == "Passenger").Id
+        });
+
+        modelBuilder.Entity<IdentityUserRole<string>>().HasData(userRoles);
+
+
         modelBuilder.Entity<Member>().HasData(
             GetMembers()
         );
@@ -41,7 +127,7 @@ public static class SeedData
                 Street="457 Fox Avenue",
                 City="Richmond",
                 PostalCode="V4F 1M7",
-                Country="Canada"
+                Country="Canada",
             },
             new Member() {    // 1
                 MemberId=2,
@@ -52,7 +138,7 @@ public static class SeedData
                 Street="231 Reiver Road",
                 City="Delta",
                 PostalCode="V6G 1M6",
-                Country="Canada"
+                Country="Canada",
             },
                 new Member() {    // 1
                 MemberId=3,
@@ -63,7 +149,7 @@ public static class SeedData
                 Street="231 Reiver Road",
                 City="Delta",
                 PostalCode="V6G 1M6",
-                Country="Canada"
+                Country="Canada",
             },
         };
 

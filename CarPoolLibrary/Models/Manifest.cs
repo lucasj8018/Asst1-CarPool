@@ -5,14 +5,13 @@ namespace CarPoolLibrary.Models;
 
 public class Manifest
 {
-    [Key, Column(Order = 0)]
-    [Required]
+    [Key]
     public int ManifestId { get; set; }
 
-    [Column(Order = 1)]
     [Required]
     public int MemberId { get; set; }
 
+    [Required]
     public int? TripId { get; set; }
 
     public string? Notes { get; set; }

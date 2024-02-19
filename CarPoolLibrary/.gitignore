@@ -5,6 +5,7 @@
 
 # dotenv files
 .env
+/Data/Migrations/
 
 # User-specific files
 *.rsuser

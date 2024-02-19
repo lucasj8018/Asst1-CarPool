@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarPoolLibrary.Models;
-using CarPoolMvc.Data;
+using CarPoolLibrary.Data;
 
 namespace CarPoolMvc.Controllers
 {
+    [Route("Trips")]
     public class TripsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -26,17 +27,18 @@ namespace CarPoolMvc.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Trips/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Trips/Details/1/1
+        [HttpGet("Details/{tripId}/{vehicleId}")]
+        public async Task<IActionResult> Details(int? tripId, int? vehicleId)
         {
-            if (id == null)
+            if (tripId == null || vehicleId == null)
             {
                 return NotFound();
             }
 
             var trip = await _context.Trips!
                 .Include(t => t.Vehicle)
-                .FirstOrDefaultAsync(m => m.TripId == id);
+                .FirstOrDefaultAsync(m => m.TripId == tripId && m.VehicleId == vehicleId);
             if (trip == null)
             {
                 return NotFound();
@@ -46,16 +48,17 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Trips/Create
+        [HttpGet("Create")]
         public IActionResult Create()
         {
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Make");
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Model");
             return View();
         }
 
         // POST: Trips/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TripId,VehicleId,Date,Time,Destination,MeetingAddress,Created,Modified,CreatedBy,ModifiedBy")] Trip trip)
         {
@@ -65,35 +68,40 @@ namespace CarPoolMvc.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Make", trip.VehicleId);
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Model", trip.VehicleId);
             return View(trip);
         }
 
-        // GET: Trips/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Trips/Edit/5/5
+        [HttpGet("Edit/{tripId}/{vehicleId}")]
+        public async Task<IActionResult> Edit(int? tripId, int? vehicleId)
         {
-            if (id == null)
+            if (tripId == null || vehicleId == null)
             {
                 return NotFound();
             }
 
-            var trip = await _context.Trips!.FindAsync(id);
+            var trip = await _context.Trips!
+                .Where(t => t.TripId == tripId && t.VehicleId == vehicleId)
+                .FirstOrDefaultAsync();
+
             if (trip == null)
             {
                 return NotFound();
             }
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Make", trip.VehicleId);
+
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Model", trip.VehicleId);
             return View(trip);
         }
 
-        // POST: Trips/Edit/5
+        // POST: Trips/Edit/5/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Edit/{tripId}/{vehicleId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TripId,VehicleId,Date,Time,Destination,MeetingAddress,Created,Modified,CreatedBy,ModifiedBy")] Trip trip)
+        public async Task<IActionResult> Edit(int tripId, int vehicleId, [Bind("TripId,VehicleId,Date,Time,Destination,MeetingAddress,Created,Modified,CreatedBy,ModifiedBy")] Trip trip)
         {
-            if (id != trip.TripId)
+            if (tripId != trip.TripId || vehicleId != trip.VehicleId)
             {
                 return NotFound();
             }
@@ -107,7 +115,7 @@ namespace CarPoolMvc.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TripExists(trip.TripId))
+                    if (!TripExists(trip.TripId, trip.VehicleId))
                     {
                         return NotFound();
                     }
@@ -118,21 +126,22 @@ namespace CarPoolMvc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Make", trip.VehicleId);
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Model", trip.VehicleId);
             return View(trip);
         }
 
-        // GET: Trips/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Trips/Delete/5/5
+        [HttpGet("Delete/{tripId}/{vehicleId}")]
+        public async Task<IActionResult> Delete(int? tripId, int? vehicleId)
         {
-            if (id == null)
+            if (tripId == null || vehicleId == null)
             {
                 return NotFound();
             }
 
             var trip = await _context.Trips!
                 .Include(t => t.Vehicle)
-                .FirstOrDefaultAsync(m => m.TripId == id);
+                .FirstOrDefaultAsync(m => m.TripId == tripId && m.VehicleId == vehicleId);
             if (trip == null)
             {
                 return NotFound();
@@ -141,24 +150,25 @@ namespace CarPoolMvc.Controllers
             return View(trip);
         }
 
-        // POST: Trips/Delete/5
-        [HttpPost, ActionName("Delete")]
+        // POST: Trips/Delete/5/5
+        [HttpPost("Delete/{tripId}/{vehicleId}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int tripId, int vehicleId)
         {
-            var trip = await _context.Trips!.FindAsync(id);
+            var trip = await _context.Trips!
+                .FirstOrDefaultAsync(m => m.TripId == tripId && m.VehicleId == vehicleId);
             if (trip != null)
             {
-                _context.Trips.Remove(trip);
+                _context.Trips!.Remove(trip);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TripExists(int id)
+        private bool TripExists(int tripId, int vehicleId)
         {
-            return _context.Trips!.Any(e => e.TripId == id);
+            return _context.Trips!.Any(e => e.TripId == tripId && e.VehicleId == vehicleId);
         }
     }
 }

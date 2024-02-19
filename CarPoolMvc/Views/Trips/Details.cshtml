@@ -11,6 +11,18 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TripId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TripId)
+        </dd>
+                <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.VehicleId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.VehicleId)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Date)
         </dt>
         <dd class = "col-sm-10">
@@ -34,15 +46,9 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.MeetingAddress)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Vehicle)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Vehicle!.Make)
-        </dd>
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Edit" asp-route-tripId="@Model.TripId" asp-route-vehicleId="@Model.VehicleId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

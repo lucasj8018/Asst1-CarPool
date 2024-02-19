@@ -15,9 +15,12 @@
             <input type="hidden" asp-for="ManifestId" />
             <input type="hidden" asp-for="MemberId" />
             <div class="form-group">
+                <label asp-for="MemberId" class="control-label"></label>
+                <select asp-for="MemberId" class ="form-control" asp-items="ViewBag.MemberId"></select>
+            </div>
+            <div class="form-group">
                 <label asp-for="TripId" class="control-label"></label>
-                <input asp-for="TripId" class="form-control" />
-                <span asp-validation-for="TripId" class="text-danger"></span>
+                <select asp-for="TripId" class ="form-control" asp-items="ViewBag.TripId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Notes" class="control-label"></label>
