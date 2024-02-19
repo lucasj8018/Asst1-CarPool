@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarPoolMvc.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class M1 : Migration
+    public partial class M2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -191,9 +191,10 @@ namespace CarPoolMvc.Data.Migrations
                 name: "Manifest",
                 columns: table => new
                 {
-                    ManifestId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ManifestId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     MemberId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TripId = table.Column<int>(type: "INTEGER", nullable: true),
+                    TripId = table.Column<int>(type: "INTEGER", nullable: false),
                     Notes = table.Column<string>(type: "TEXT", nullable: true),
                     Created = table.Column<DateTime>(type: "TEXT", nullable: true),
                     Modified = table.Column<DateTime>(type: "TEXT", nullable: true),
@@ -202,7 +203,7 @@ namespace CarPoolMvc.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Manifest", x => new { x.ManifestId, x.MemberId });
+                    table.PrimaryKey("PK_Manifest", x => x.ManifestId);
                     table.ForeignKey(
                         name: "FK_Manifest_Member_MemberId",
                         column: x => x.MemberId,
@@ -242,7 +243,8 @@ namespace CarPoolMvc.Data.Migrations
                 name: "Trip",
                 columns: table => new
                 {
-                    TripId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TripId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     VehicleId = table.Column<int>(type: "INTEGER", nullable: false),
                     Date = table.Column<DateOnly>(type: "TEXT", nullable: false),
                     Time = table.Column<TimeOnly>(type: "TEXT", nullable: false),
@@ -255,7 +257,7 @@ namespace CarPoolMvc.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Trip", x => new { x.TripId, x.VehicleId });
+                    table.PrimaryKey("PK_Trip", x => x.TripId);
                     table.ForeignKey(
                         name: "FK_Trip_Vehicle_VehicleId",
                         column: x => x.VehicleId,
@@ -269,9 +271,9 @@ namespace CarPoolMvc.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Discriminator", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "50fe6afd-daa7-4eca-bc3d-a4e42dd176cf", null, "Owner Role", "Role", "Owner", "OWNER" },
-                    { "8d20ebd0-bdac-4efd-bf6b-b57d5d8a6d24", null, "Passenger Role", "Role", "Passenger", "PASSENGER" },
-                    { "ed665b0b-5a76-4ecc-85c0-1642a86ed0d7", null, "Administrator Role", "Role", "Admin", "ADMIN" }
+                    { "24d5cc5b-c172-49ab-9ce6-e855b5e29f96", null, "Owner Role", "Role", "Owner", "OWNER" },
+                    { "28fc9e1e-4e36-472a-aa76-c12647246d06", null, "Passenger Role", "Role", "Passenger", "PASSENGER" },
+                    { "dc61d326-9b26-404b-9553-86ef2464d964", null, "Administrator Role", "Role", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
@@ -279,9 +281,9 @@ namespace CarPoolMvc.Data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "230a820c-fb7a-4808-ab92-bbb825fe67e2", 0, "48bc7ad9-33ac-4604-8b3e-3406e5515c1a", "User", "a@a.a", true, "Admin", "Admin", false, null, null, "A@A.A", "AQAAAAIAAYagAAAAEEdWwUZMrbiO8hQsJadE6JfFPux5o72ZYAMrHVdQwRjSQf+NzaVdDX85WMbWWMpLxQ==", null, false, "5ac32923-1fbd-49c5-bad5-3a5d988ace4d", false, "a@a.a" },
-                    { "2a0b778f-57dc-4d70-a804-7f0f0a713af7", 0, "e3beb9a9-0d97-442d-9e4d-581dd20849c7", "User", "o@o.o", true, "Owner", "Owner", false, null, null, "O@O.O", "AQAAAAIAAYagAAAAEIgTmOwLu9v5MpknbvV28ETBkFbT+N8tSAoH8wCdEn116YNLAISBO2E0ijwbShoMVA==", null, false, "93d12b47-2e33-4390-aa0d-f33326f434aa", false, "o@o.o" },
-                    { "452363e3-6567-4a4b-913d-9421274c5275", 0, "d861f493-75f6-4c85-a02e-b9a54c384bbf", "User", "p@p.p", true, "Passenger", "Passenger", false, null, null, "P@P.P", "AQAAAAIAAYagAAAAEF2HHxSR9x2pMT3LVU6PqfjvSwLwgTE6N+ObjGrX6+NN1nrHtwzjFT7GvvPJ4wvceg==", null, false, "a26aab93-f311-460a-94c3-92612dddbe72", false, "p@p.p" }
+                    { "34919c6b-d52e-4b42-98f4-36a538fd8780", 0, "5a8fa9dd-4377-4f0a-8de3-695f6ffb99bc", "User", "p@p.p", true, "Passenger", "Passenger", false, null, null, "P@P.P", "AQAAAAIAAYagAAAAEIbn35deIKBruk03bWo2fhq5mcdHZpOeU7yyUZCGDLOmYiLe632mvMx7RbOTUDsUcQ==", null, false, "be6a4035-033e-4bb5-9ad0-3c654aa2abf2", false, "p@p.p" },
+                    { "4c9b9702-90ef-4c70-bea9-d1a8ba743b2e", 0, "f1192ecf-bf23-42a9-8220-b3c90bbdf82e", "User", "a@a.a", true, "Admin", "Admin", false, null, null, "A@A.A", "AQAAAAIAAYagAAAAEA6qIvm4YFKDub70pLA9dO+x1OBzIa153ulVWmYkeP+rWZdYdiygjsggAZsG3qAjsg==", null, false, "23c3d607-e117-4d51-95bf-c9b57944afc6", false, "a@a.a" },
+                    { "57f33989-0a56-441e-a8ac-29ce3fba3d3f", 0, "f48b86fb-165a-4dae-94f0-071aea6e3150", "User", "o@o.o", true, "Owner", "Owner", false, null, null, "O@O.O", "AQAAAAIAAYagAAAAEHerNhGXQ7QCfnKukimbWaoWz5D4lGIH5xxryP6SWFNwU8CL9s9c7I6eREH+0rNk1Q==", null, false, "23687571-d8a5-4a84-be04-c19e70169f8f", false, "o@o.o" }
                 });
 
             migrationBuilder.InsertData(
@@ -289,9 +291,9 @@ namespace CarPoolMvc.Data.Migrations
                 columns: new[] { "MemberId", "City", "Country", "Created", "CreatedBy", "Email", "FirstName", "LastName", "Mobile", "Modified", "ModifiedBy", "PostalCode", "Street" },
                 values: new object[,]
                 {
-                    { 1, "Richmond", "Canada", new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(350), "System", "sam@fox.com", "Sam", "Fox", "778-111-2222", new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(390), "System", "V4F 1M7", "457 Fox Avenue" },
-                    { 2, "Delta", "Canada", new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(420), "System", "ann@day.com", "Ann", "Day", "604-333-6666", new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(420), "System", "V6G 1M6", "231 Reiver Road" },
-                    { 3, "Delta", "Canada", new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(420), "System", "lucas@jian.com", "Lucas", "Jian", "604-333-6666", new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(420), "System", "V6G 1M6", "231 Reiver Road" }
+                    { 1, "Richmond", "Canada", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7680), "System", "sam@fox.com", "Sam", "Fox", "778-111-2222", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7760), "System", "V4F 1M7", "457 Fox Avenue" },
+                    { 2, "Delta", "Canada", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770), "System", "ann@day.com", "Ann", "Day", "604-333-6666", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770), "System", "V6G 1M6", "231 Reiver Road" },
+                    { 3, "Delta", "Canada", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770), "System", "lucas@jian.com", "Lucas", "Jian", "604-333-6666", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770), "System", "V6G 1M6", "231 Reiver Road" }
                 });
 
             migrationBuilder.InsertData(
@@ -299,19 +301,19 @@ namespace CarPoolMvc.Data.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "ed665b0b-5a76-4ecc-85c0-1642a86ed0d7", "230a820c-fb7a-4808-ab92-bbb825fe67e2" },
-                    { "50fe6afd-daa7-4eca-bc3d-a4e42dd176cf", "2a0b778f-57dc-4d70-a804-7f0f0a713af7" },
-                    { "8d20ebd0-bdac-4efd-bf6b-b57d5d8a6d24", "452363e3-6567-4a4b-913d-9421274c5275" }
+                    { "28fc9e1e-4e36-472a-aa76-c12647246d06", "34919c6b-d52e-4b42-98f4-36a538fd8780" },
+                    { "dc61d326-9b26-404b-9553-86ef2464d964", "4c9b9702-90ef-4c70-bea9-d1a8ba743b2e" },
+                    { "24d5cc5b-c172-49ab-9ce6-e855b5e29f96", "57f33989-0a56-441e-a8ac-29ce3fba3d3f" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Manifest",
-                columns: new[] { "ManifestId", "MemberId", "Created", "CreatedBy", "Modified", "ModifiedBy", "Notes", "TripId" },
+                columns: new[] { "ManifestId", "Created", "CreatedBy", "MemberId", "Modified", "ModifiedBy", "Notes", "TripId" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(710), "System", new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(710), "System", "I will be driving to work", 1 },
-                    { 2, 2, new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(720), "System", new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(720), "System", "I will be driving to work", 2 },
-                    { 3, 3, new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(720), "System", new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(720), "System", "I will be driving to work", 3 }
+                    { 1, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8050), "System", 1, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8050), "System", "I will be driving to work", 1 },
+                    { 2, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070), "System", 2, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070), "System", "I will be driving to work", 2 },
+                    { 3, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070), "System", 3, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070), "System", "I will be driving to work", 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -319,19 +321,19 @@ namespace CarPoolMvc.Data.Migrations
                 columns: new[] { "VehicleId", "Created", "CreatedBy", "Make", "MemberId", "Model", "Modified", "ModifiedBy", "NumberOfSeats", "VehicleType", "Year" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(440), "System", "Ford", 1, "Escort", new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(440), "System", 5, "Sedan", 2020 },
-                    { 2, new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(450), "System", "Kia", 2, "Soul", new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(450), "System", 5, "Compact", 2022 },
-                    { 3, new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(450), "System", "Honda", 3, "Odyssey", new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(450), "System", 8, "Minivan", 2019 }
+                    { 1, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7810), "System", "Ford", 1, "Escort", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7810), "System", 5, "Sedan", 2020 },
+                    { 2, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7820), "System", "Kia", 2, "Soul", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7820), "System", 5, "Compact", 2022 },
+                    { 3, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7820), "System", "Honda", 3, "Odyssey", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7830), "System", 8, "Minivan", 2019 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Trip",
-                columns: new[] { "TripId", "VehicleId", "Created", "CreatedBy", "Date", "Destination", "MeetingAddress", "Modified", "ModifiedBy", "Time" },
+                columns: new[] { "TripId", "Created", "CreatedBy", "Date", "Destination", "MeetingAddress", "Modified", "ModifiedBy", "Time", "VehicleId" },
                 values: new object[,]
                 {
-                    { 1, 1, null, null, new DateOnly(2024, 2, 2), "123 Marine Drive, Burnaby", "1123 River Road, Coquitlam", null, null, new TimeOnly(12, 0, 0) },
-                    { 2, 2, null, null, new DateOnly(2024, 2, 3), "231 Boundary Road, Vancouver", "345 King George Highway, Surrey", null, null, new TimeOnly(8, 0, 0) },
-                    { 3, 3, null, null, new DateOnly(2024, 2, 4), "12345 Lougheed Highway, Coquitlam", "540 Oliver Road, Richmond", null, null, new TimeOnly(15, 0, 0) }
+                    { 1, null, null, new DateOnly(2024, 2, 2), "123 Marine Drive, Burnaby", "1123 River Road, Coquitlam", null, null, new TimeOnly(12, 0, 0), 1 },
+                    { 2, null, null, new DateOnly(2024, 2, 3), "231 Boundary Road, Vancouver", "345 King George Highway, Surrey", null, null, new TimeOnly(8, 0, 0), 2 },
+                    { 3, null, null, new DateOnly(2024, 2, 4), "12345 Lougheed Highway, Coquitlam", "540 Oliver Road, Richmond", null, null, new TimeOnly(15, 0, 0), 3 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -372,9 +374,21 @@ namespace CarPoolMvc.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Manifest_ManifestId_MemberId",
+                table: "Manifest",
+                columns: new[] { "ManifestId", "MemberId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Manifest_MemberId",
                 table: "Manifest",
                 column: "MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Trip_TripId_VehicleId",
+                table: "Trip",
+                columns: new[] { "TripId", "VehicleId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Trip_VehicleId",

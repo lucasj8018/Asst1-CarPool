@@ -11,12 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarPoolMvc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-    [Migration("20240219001352_M1")]
-========
-    [Migration("20240218181623_M1")]
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
-    partial class M1
+    [Migration("20240219050008_M2")]
+    partial class M2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,17 +61,10 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             ManifestId = 1,
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            MemberId = 1,
-                            Created = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(710),
-                            CreatedBy = "System",
-                            Modified = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(710),
-========
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6347),
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8050),
                             CreatedBy = "System",
                             MemberId = 1,
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6349),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8050),
                             ModifiedBy = "System",
                             Notes = "I will be driving to work",
                             TripId = 1
@@ -83,17 +72,10 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             ManifestId = 2,
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            MemberId = 2,
-                            Created = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(720),
-                            CreatedBy = "System",
-                            Modified = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(720),
-========
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6359),
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070),
                             CreatedBy = "System",
                             MemberId = 2,
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6360),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070),
                             ModifiedBy = "System",
                             Notes = "I will be driving to work",
                             TripId = 2
@@ -101,17 +83,10 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             ManifestId = 3,
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            MemberId = 3,
-                            Created = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(720),
-                            CreatedBy = "System",
-                            Modified = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(720),
-========
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6362),
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070),
                             CreatedBy = "System",
                             MemberId = 3,
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6363),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070),
                             ModifiedBy = "System",
                             Notes = "I will be driving to work",
                             TripId = 3
@@ -173,21 +148,13 @@ namespace CarPoolMvc.Data.Migrations
                             MemberId = 1,
                             City = "Richmond",
                             Country = "Canada",
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            Created = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(350),
-========
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5898),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7680),
                             CreatedBy = "System",
                             Email = "sam@fox.com",
                             FirstName = "Sam",
                             LastName = "Fox",
                             Mobile = "778-111-2222",
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            Modified = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(390),
-========
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5938),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7760),
                             ModifiedBy = "System",
                             PostalCode = "V4F 1M7",
                             Street = "457 Fox Avenue"
@@ -197,21 +164,13 @@ namespace CarPoolMvc.Data.Migrations
                             MemberId = 2,
                             City = "Delta",
                             Country = "Canada",
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            Created = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(420),
-========
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5948),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770),
                             CreatedBy = "System",
                             Email = "ann@day.com",
                             FirstName = "Ann",
                             LastName = "Day",
                             Mobile = "604-333-6666",
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            Modified = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(420),
-========
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5949),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770),
                             ModifiedBy = "System",
                             PostalCode = "V6G 1M6",
                             Street = "231 Reiver Road"
@@ -221,21 +180,13 @@ namespace CarPoolMvc.Data.Migrations
                             MemberId = 3,
                             City = "Delta",
                             Country = "Canada",
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            Created = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(420),
-========
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5953),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770),
                             CreatedBy = "System",
                             Email = "lucas@jian.com",
                             FirstName = "Lucas",
                             LastName = "Jian",
                             Mobile = "604-333-6666",
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            Modified = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(420),
-========
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5954),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770),
                             ModifiedBy = "System",
                             PostalCode = "V6G 1M6",
                             Street = "231 Reiver Road"
@@ -365,20 +316,12 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             VehicleId = 1,
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            Created = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(440),
-========
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5997),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7810),
                             CreatedBy = "System",
                             Make = "Ford",
                             MemberId = 1,
                             Model = "Escort",
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            Modified = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(440),
-========
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5999),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7810),
                             ModifiedBy = "System",
                             NumberOfSeats = 5,
                             VehicleType = "Sedan",
@@ -387,20 +330,12 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             VehicleId = 2,
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            Created = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(450),
-========
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6006),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7820),
                             CreatedBy = "System",
                             Make = "Kia",
                             MemberId = 2,
                             Model = "Soul",
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            Modified = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(450),
-========
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6008),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7820),
                             ModifiedBy = "System",
                             NumberOfSeats = 5,
                             VehicleType = "Compact",
@@ -409,20 +344,12 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             VehicleId = 3,
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            Created = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(450),
-========
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6011),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7820),
                             CreatedBy = "System",
                             Make = "Honda",
                             MemberId = 3,
                             Model = "Odyssey",
-<<<<<<<< HEAD:CarPoolMvc/Data/Migrations/20240219001352_M1.Designer.cs
-                            Modified = new DateTime(2024, 2, 18, 16, 13, 52, 151, DateTimeKind.Local).AddTicks(450),
-========
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6012),
->>>>>>>> dev:CarPoolMvc/Data/Migrations/20240218181623_M1.Designer.cs
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7830),
                             ModifiedBy = "System",
                             NumberOfSeats = 8,
                             VehicleType = "Minivan",
@@ -625,18 +552,18 @@ namespace CarPoolMvc.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "230a820c-fb7a-4808-ab92-bbb825fe67e2",
-                            RoleId = "ed665b0b-5a76-4ecc-85c0-1642a86ed0d7"
+                            UserId = "4c9b9702-90ef-4c70-bea9-d1a8ba743b2e",
+                            RoleId = "dc61d326-9b26-404b-9553-86ef2464d964"
                         },
                         new
                         {
-                            UserId = "2a0b778f-57dc-4d70-a804-7f0f0a713af7",
-                            RoleId = "50fe6afd-daa7-4eca-bc3d-a4e42dd176cf"
+                            UserId = "57f33989-0a56-441e-a8ac-29ce3fba3d3f",
+                            RoleId = "24d5cc5b-c172-49ab-9ce6-e855b5e29f96"
                         },
                         new
                         {
-                            UserId = "452363e3-6567-4a4b-913d-9421274c5275",
-                            RoleId = "8d20ebd0-bdac-4efd-bf6b-b57d5d8a6d24"
+                            UserId = "34919c6b-d52e-4b42-98f4-36a538fd8780",
+                            RoleId = "28fc9e1e-4e36-472a-aa76-c12647246d06"
                         });
                 });
 
@@ -673,21 +600,21 @@ namespace CarPoolMvc.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ed665b0b-5a76-4ecc-85c0-1642a86ed0d7",
+                            Id = "dc61d326-9b26-404b-9553-86ef2464d964",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
                             Description = "Administrator Role"
                         },
                         new
                         {
-                            Id = "50fe6afd-daa7-4eca-bc3d-a4e42dd176cf",
+                            Id = "24d5cc5b-c172-49ab-9ce6-e855b5e29f96",
                             Name = "Owner",
                             NormalizedName = "OWNER",
                             Description = "Owner Role"
                         },
                         new
                         {
-                            Id = "8d20ebd0-bdac-4efd-bf6b-b57d5d8a6d24",
+                            Id = "28fc9e1e-4e36-472a-aa76-c12647246d06",
                             Name = "Passenger",
                             NormalizedName = "PASSENGER",
                             Description = "Passenger Role"
@@ -709,16 +636,16 @@ namespace CarPoolMvc.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "230a820c-fb7a-4808-ab92-bbb825fe67e2",
+                            Id = "4c9b9702-90ef-4c70-bea9-d1a8ba743b2e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "48bc7ad9-33ac-4604-8b3e-3406e5515c1a",
+                            ConcurrencyStamp = "f1192ecf-bf23-42a9-8220-b3c90bbdf82e",
                             Email = "a@a.a",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedUserName = "A@A.A",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEdWwUZMrbiO8hQsJadE6JfFPux5o72ZYAMrHVdQwRjSQf+NzaVdDX85WMbWWMpLxQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA6qIvm4YFKDub70pLA9dO+x1OBzIa153ulVWmYkeP+rWZdYdiygjsggAZsG3qAjsg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5ac32923-1fbd-49c5-bad5-3a5d988ace4d",
+                            SecurityStamp = "23c3d607-e117-4d51-95bf-c9b57944afc6",
                             TwoFactorEnabled = false,
                             UserName = "a@a.a",
                             FirstName = "Admin",
@@ -726,16 +653,16 @@ namespace CarPoolMvc.Data.Migrations
                         },
                         new
                         {
-                            Id = "2a0b778f-57dc-4d70-a804-7f0f0a713af7",
+                            Id = "57f33989-0a56-441e-a8ac-29ce3fba3d3f",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e3beb9a9-0d97-442d-9e4d-581dd20849c7",
+                            ConcurrencyStamp = "f48b86fb-165a-4dae-94f0-071aea6e3150",
                             Email = "o@o.o",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedUserName = "O@O.O",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIgTmOwLu9v5MpknbvV28ETBkFbT+N8tSAoH8wCdEn116YNLAISBO2E0ijwbShoMVA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHerNhGXQ7QCfnKukimbWaoWz5D4lGIH5xxryP6SWFNwU8CL9s9c7I6eREH+0rNk1Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "93d12b47-2e33-4390-aa0d-f33326f434aa",
+                            SecurityStamp = "23687571-d8a5-4a84-be04-c19e70169f8f",
                             TwoFactorEnabled = false,
                             UserName = "o@o.o",
                             FirstName = "Owner",
@@ -743,16 +670,16 @@ namespace CarPoolMvc.Data.Migrations
                         },
                         new
                         {
-                            Id = "452363e3-6567-4a4b-913d-9421274c5275",
+                            Id = "34919c6b-d52e-4b42-98f4-36a538fd8780",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d861f493-75f6-4c85-a02e-b9a54c384bbf",
+                            ConcurrencyStamp = "5a8fa9dd-4377-4f0a-8de3-695f6ffb99bc",
                             Email = "p@p.p",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedUserName = "P@P.P",
-                            PasswordHash = "AQAAAAIAAYagAAAAEF2HHxSR9x2pMT3LVU6PqfjvSwLwgTE6N+ObjGrX6+NN1nrHtwzjFT7GvvPJ4wvceg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIbn35deIKBruk03bWo2fhq5mcdHZpOeU7yyUZCGDLOmYiLe632mvMx7RbOTUDsUcQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a26aab93-f311-460a-94c3-92612dddbe72",
+                            SecurityStamp = "be6a4035-033e-4bb5-9ad0-3c654aa2abf2",
                             TwoFactorEnabled = false,
                             UserName = "p@p.p",
                             FirstName = "Passenger",
