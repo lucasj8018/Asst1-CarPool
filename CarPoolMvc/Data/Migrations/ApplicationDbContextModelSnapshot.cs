@@ -20,18 +20,17 @@ namespace CarPoolMvc.Data.Migrations
             modelBuilder.Entity("CarPoolLibrary.Models.Manifest", b =>
                 {
                     b.Property<int>("ManifestId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnOrder(0);
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnOrder(1);
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("Modified")
                         .HasColumnType("TEXT");
@@ -43,11 +42,15 @@ namespace CarPoolMvc.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("TripId")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("ManifestId", "MemberId");
+                    b.HasKey("ManifestId");
 
                     b.HasIndex("MemberId");
+
+                    b.HasIndex("ManifestId", "MemberId")
+                        .IsUnique();
 
                     b.ToTable("Manifest", (string)null);
 
@@ -190,12 +193,8 @@ namespace CarPoolMvc.Data.Migrations
             modelBuilder.Entity("CarPoolLibrary.Models.Trip", b =>
                 {
                     b.Property<int>("TripId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnOrder(0);
-
-                    b.Property<int>("VehicleId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnOrder(1);
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("TEXT");
@@ -223,9 +222,15 @@ namespace CarPoolMvc.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("TripId", "VehicleId");
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("TripId");
 
                     b.HasIndex("VehicleId");
+
+                    b.HasIndex("TripId", "VehicleId")
+                        .IsUnique();
 
                     b.ToTable("Trip", (string)null);
 
@@ -233,29 +238,29 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             TripId = 1,
-                            VehicleId = 1,
                             Date = new DateOnly(2024, 2, 2),
                             Destination = "123 Marine Drive, Burnaby",
                             MeetingAddress = "1123 River Road, Coquitlam",
-                            Time = new TimeOnly(12, 0, 0)
+                            Time = new TimeOnly(12, 0, 0),
+                            VehicleId = 1
                         },
                         new
                         {
                             TripId = 2,
-                            VehicleId = 2,
                             Date = new DateOnly(2024, 2, 3),
                             Destination = "231 Boundary Road, Vancouver",
                             MeetingAddress = "345 King George Highway, Surrey",
-                            Time = new TimeOnly(8, 0, 0)
+                            Time = new TimeOnly(8, 0, 0),
+                            VehicleId = 2
                         },
                         new
                         {
                             TripId = 3,
-                            VehicleId = 3,
                             Date = new DateOnly(2024, 2, 4),
                             Destination = "12345 Lougheed Highway, Coquitlam",
                             MeetingAddress = "540 Oliver Road, Richmond",
-                            Time = new TimeOnly(15, 0, 0)
+                            Time = new TimeOnly(15, 0, 0),
+                            VehicleId = 3
                         });
                 });
 

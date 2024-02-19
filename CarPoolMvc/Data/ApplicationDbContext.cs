@@ -19,8 +19,10 @@ public class ApplicationDbContext : IdentityDbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<Trip>().HasKey(t => new { t.TripId, t.VehicleId });
-        builder.Entity<Manifest>().HasKey(m => new { m.ManifestId, m.MemberId });
+        // builder.Entity<Trip>().HasKey(t => new { t.TripId, t.VehicleId });
+        // builder.Entity<Manifest>().HasKey(m => new { m.ManifestId, m.MemberId });
+        builder.Entity<Trip>().HasIndex(e => new { e.TripId, e.VehicleId }).IsUnique();
+        builder.Entity<Manifest>().HasIndex(e => new { e.ManifestId, e.MemberId }).IsUnique();
 
         base.OnModelCreating(builder);
         builder.Entity<Member>().ToTable("Member");

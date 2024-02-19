@@ -40,6 +40,12 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// app.UseEndpoints(endpoints =>
+// {
+//     _ = endpoints.MapControllers(); // Enables attribute routing
+// });
+
 app.MapRazorPages();
 
 using (var scope = app.Services.CreateScope())
