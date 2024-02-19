@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarPoolMvc.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class M1 : Migration
+    public partial class M2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,6 +18,8 @@ namespace CarPoolMvc.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Discriminator = table.Column<string>(type: "TEXT", maxLength: 13, nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true)
@@ -32,6 +34,9 @@ namespace CarPoolMvc.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Discriminator = table.Column<string>(type: "TEXT", maxLength: 13, nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: true),
+                    LastName = table.Column<string>(type: "TEXT", nullable: true),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -262,13 +267,43 @@ namespace CarPoolMvc.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Description", "Discriminator", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "24d5cc5b-c172-49ab-9ce6-e855b5e29f96", null, "Owner Role", "Role", "Owner", "OWNER" },
+                    { "28fc9e1e-4e36-472a-aa76-c12647246d06", null, "Passenger Role", "Role", "Passenger", "PASSENGER" },
+                    { "dc61d326-9b26-404b-9553-86ef2464d964", null, "Administrator Role", "Role", "Admin", "ADMIN" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "34919c6b-d52e-4b42-98f4-36a538fd8780", 0, "5a8fa9dd-4377-4f0a-8de3-695f6ffb99bc", "User", "p@p.p", true, "Passenger", "Passenger", false, null, null, "P@P.P", "AQAAAAIAAYagAAAAEIbn35deIKBruk03bWo2fhq5mcdHZpOeU7yyUZCGDLOmYiLe632mvMx7RbOTUDsUcQ==", null, false, "be6a4035-033e-4bb5-9ad0-3c654aa2abf2", false, "p@p.p" },
+                    { "4c9b9702-90ef-4c70-bea9-d1a8ba743b2e", 0, "f1192ecf-bf23-42a9-8220-b3c90bbdf82e", "User", "a@a.a", true, "Admin", "Admin", false, null, null, "A@A.A", "AQAAAAIAAYagAAAAEA6qIvm4YFKDub70pLA9dO+x1OBzIa153ulVWmYkeP+rWZdYdiygjsggAZsG3qAjsg==", null, false, "23c3d607-e117-4d51-95bf-c9b57944afc6", false, "a@a.a" },
+                    { "57f33989-0a56-441e-a8ac-29ce3fba3d3f", 0, "f48b86fb-165a-4dae-94f0-071aea6e3150", "User", "o@o.o", true, "Owner", "Owner", false, null, null, "O@O.O", "AQAAAAIAAYagAAAAEHerNhGXQ7QCfnKukimbWaoWz5D4lGIH5xxryP6SWFNwU8CL9s9c7I6eREH+0rNk1Q==", null, false, "23687571-d8a5-4a84-be04-c19e70169f8f", false, "o@o.o" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Member",
                 columns: new[] { "MemberId", "City", "Country", "Created", "CreatedBy", "Email", "FirstName", "LastName", "Mobile", "Modified", "ModifiedBy", "PostalCode", "Street" },
                 values: new object[,]
                 {
-                    { 1, "Richmond", "Canada", new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5898), "System", "sam@fox.com", "Sam", "Fox", "778-111-2222", new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5938), "System", "V4F 1M7", "457 Fox Avenue" },
-                    { 2, "Delta", "Canada", new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5948), "System", "ann@day.com", "Ann", "Day", "604-333-6666", new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5949), "System", "V6G 1M6", "231 Reiver Road" },
-                    { 3, "Delta", "Canada", new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5953), "System", "lucas@jian.com", "Lucas", "Jian", "604-333-6666", new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5954), "System", "V6G 1M6", "231 Reiver Road" }
+                    { 1, "Richmond", "Canada", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7680), "System", "sam@fox.com", "Sam", "Fox", "778-111-2222", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7760), "System", "V4F 1M7", "457 Fox Avenue" },
+                    { 2, "Delta", "Canada", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770), "System", "ann@day.com", "Ann", "Day", "604-333-6666", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770), "System", "V6G 1M6", "231 Reiver Road" },
+                    { 3, "Delta", "Canada", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770), "System", "lucas@jian.com", "Lucas", "Jian", "604-333-6666", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770), "System", "V6G 1M6", "231 Reiver Road" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { "28fc9e1e-4e36-472a-aa76-c12647246d06", "34919c6b-d52e-4b42-98f4-36a538fd8780" },
+                    { "dc61d326-9b26-404b-9553-86ef2464d964", "4c9b9702-90ef-4c70-bea9-d1a8ba743b2e" },
+                    { "24d5cc5b-c172-49ab-9ce6-e855b5e29f96", "57f33989-0a56-441e-a8ac-29ce3fba3d3f" }
                 });
 
             migrationBuilder.InsertData(
@@ -276,9 +311,9 @@ namespace CarPoolMvc.Data.Migrations
                 columns: new[] { "ManifestId", "Created", "CreatedBy", "MemberId", "Modified", "ModifiedBy", "Notes", "TripId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6347), "System", 1, new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6349), "System", "I will be driving to work", 1 },
-                    { 2, new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6359), "System", 2, new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6360), "System", "I will be driving to work", 2 },
-                    { 3, new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6362), "System", 3, new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6363), "System", "I will be driving to work", 3 }
+                    { 1, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8050), "System", 1, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8050), "System", "I will be driving to work", 1 },
+                    { 2, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070), "System", 2, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070), "System", "I will be driving to work", 2 },
+                    { 3, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070), "System", 3, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070), "System", "I will be driving to work", 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -286,9 +321,9 @@ namespace CarPoolMvc.Data.Migrations
                 columns: new[] { "VehicleId", "Created", "CreatedBy", "Make", "MemberId", "Model", "Modified", "ModifiedBy", "NumberOfSeats", "VehicleType", "Year" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5997), "System", "Ford", 1, "Escort", new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5999), "System", 5, "Sedan", 2020 },
-                    { 2, new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6006), "System", "Kia", 2, "Soul", new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6008), "System", 5, "Compact", 2022 },
-                    { 3, new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6011), "System", "Honda", 3, "Odyssey", new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6012), "System", 8, "Minivan", 2019 }
+                    { 1, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7810), "System", "Ford", 1, "Escort", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7810), "System", 5, "Sedan", 2020 },
+                    { 2, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7820), "System", "Kia", 2, "Soul", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7820), "System", 5, "Compact", 2022 },
+                    { 3, new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7820), "System", "Honda", 3, "Odyssey", new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7830), "System", 8, "Minivan", 2019 }
                 });
 
             migrationBuilder.InsertData(

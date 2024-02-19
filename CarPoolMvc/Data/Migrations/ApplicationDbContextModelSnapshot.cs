@@ -58,10 +58,10 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             ManifestId = 1,
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6347),
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8050),
                             CreatedBy = "System",
                             MemberId = 1,
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6349),
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8050),
                             ModifiedBy = "System",
                             Notes = "I will be driving to work",
                             TripId = 1
@@ -69,10 +69,10 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             ManifestId = 2,
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6359),
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070),
                             CreatedBy = "System",
                             MemberId = 2,
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6360),
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070),
                             ModifiedBy = "System",
                             Notes = "I will be driving to work",
                             TripId = 2
@@ -80,10 +80,10 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             ManifestId = 3,
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6362),
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070),
                             CreatedBy = "System",
                             MemberId = 3,
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6363),
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(8070),
                             ModifiedBy = "System",
                             Notes = "I will be driving to work",
                             TripId = 3
@@ -145,13 +145,13 @@ namespace CarPoolMvc.Data.Migrations
                             MemberId = 1,
                             City = "Richmond",
                             Country = "Canada",
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5898),
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7680),
                             CreatedBy = "System",
                             Email = "sam@fox.com",
                             FirstName = "Sam",
                             LastName = "Fox",
                             Mobile = "778-111-2222",
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5938),
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7760),
                             ModifiedBy = "System",
                             PostalCode = "V4F 1M7",
                             Street = "457 Fox Avenue"
@@ -161,13 +161,13 @@ namespace CarPoolMvc.Data.Migrations
                             MemberId = 2,
                             City = "Delta",
                             Country = "Canada",
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5948),
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770),
                             CreatedBy = "System",
                             Email = "ann@day.com",
                             FirstName = "Ann",
                             LastName = "Day",
                             Mobile = "604-333-6666",
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5949),
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770),
                             ModifiedBy = "System",
                             PostalCode = "V6G 1M6",
                             Street = "231 Reiver Road"
@@ -177,13 +177,13 @@ namespace CarPoolMvc.Data.Migrations
                             MemberId = 3,
                             City = "Delta",
                             Country = "Canada",
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5953),
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770),
                             CreatedBy = "System",
                             Email = "lucas@jian.com",
                             FirstName = "Lucas",
                             LastName = "Jian",
                             Mobile = "604-333-6666",
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5954),
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7770),
                             ModifiedBy = "System",
                             PostalCode = "V6G 1M6",
                             Street = "231 Reiver Road"
@@ -313,12 +313,12 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             VehicleId = 1,
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5997),
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7810),
                             CreatedBy = "System",
                             Make = "Ford",
                             MemberId = 1,
                             Model = "Escort",
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(5999),
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7810),
                             ModifiedBy = "System",
                             NumberOfSeats = 5,
                             VehicleType = "Sedan",
@@ -327,12 +327,12 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             VehicleId = 2,
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6006),
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7820),
                             CreatedBy = "System",
                             Make = "Kia",
                             MemberId = 2,
                             Model = "Soul",
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6008),
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7820),
                             ModifiedBy = "System",
                             NumberOfSeats = 5,
                             VehicleType = "Compact",
@@ -341,12 +341,12 @@ namespace CarPoolMvc.Data.Migrations
                         new
                         {
                             VehicleId = 3,
-                            Created = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6011),
+                            Created = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7820),
                             CreatedBy = "System",
                             Make = "Honda",
                             MemberId = 3,
                             Model = "Odyssey",
-                            Modified = new DateTime(2024, 2, 18, 10, 16, 21, 769, DateTimeKind.Local).AddTicks(6012),
+                            Modified = new DateTime(2024, 2, 18, 21, 0, 7, 563, DateTimeKind.Local).AddTicks(7830),
                             ModifiedBy = "System",
                             NumberOfSeats = 8,
                             VehicleType = "Minivan",
@@ -361,6 +361,11 @@ namespace CarPoolMvc.Data.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -378,6 +383,10 @@ namespace CarPoolMvc.Data.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -413,6 +422,11 @@ namespace CarPoolMvc.Data.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
@@ -465,6 +479,10 @@ namespace CarPoolMvc.Data.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -527,6 +545,23 @@ namespace CarPoolMvc.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "4c9b9702-90ef-4c70-bea9-d1a8ba743b2e",
+                            RoleId = "dc61d326-9b26-404b-9553-86ef2464d964"
+                        },
+                        new
+                        {
+                            UserId = "57f33989-0a56-441e-a8ac-29ce3fba3d3f",
+                            RoleId = "24d5cc5b-c172-49ab-9ce6-e855b5e29f96"
+                        },
+                        new
+                        {
+                            UserId = "34919c6b-d52e-4b42-98f4-36a538fd8780",
+                            RoleId = "28fc9e1e-4e36-472a-aa76-c12647246d06"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -548,6 +583,105 @@ namespace CarPoolMvc.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("CarPoolLibrary.Models.Role", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "dc61d326-9b26-404b-9553-86ef2464d964",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN",
+                            Description = "Administrator Role"
+                        },
+                        new
+                        {
+                            Id = "24d5cc5b-c172-49ab-9ce6-e855b5e29f96",
+                            Name = "Owner",
+                            NormalizedName = "OWNER",
+                            Description = "Owner Role"
+                        },
+                        new
+                        {
+                            Id = "28fc9e1e-4e36-472a-aa76-c12647246d06",
+                            Name = "Passenger",
+                            NormalizedName = "PASSENGER",
+                            Description = "Passenger Role"
+                        });
+                });
+
+            modelBuilder.Entity("CarPoolLibrary.Models.User", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "4c9b9702-90ef-4c70-bea9-d1a8ba743b2e",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "f1192ecf-bf23-42a9-8220-b3c90bbdf82e",
+                            Email = "a@a.a",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "A@A.A",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA6qIvm4YFKDub70pLA9dO+x1OBzIa153ulVWmYkeP+rWZdYdiygjsggAZsG3qAjsg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "23c3d607-e117-4d51-95bf-c9b57944afc6",
+                            TwoFactorEnabled = false,
+                            UserName = "a@a.a",
+                            FirstName = "Admin",
+                            LastName = "Admin"
+                        },
+                        new
+                        {
+                            Id = "57f33989-0a56-441e-a8ac-29ce3fba3d3f",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "f48b86fb-165a-4dae-94f0-071aea6e3150",
+                            Email = "o@o.o",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "O@O.O",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHerNhGXQ7QCfnKukimbWaoWz5D4lGIH5xxryP6SWFNwU8CL9s9c7I6eREH+0rNk1Q==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "23687571-d8a5-4a84-be04-c19e70169f8f",
+                            TwoFactorEnabled = false,
+                            UserName = "o@o.o",
+                            FirstName = "Owner",
+                            LastName = "Owner"
+                        },
+                        new
+                        {
+                            Id = "34919c6b-d52e-4b42-98f4-36a538fd8780",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "5a8fa9dd-4377-4f0a-8de3-695f6ffb99bc",
+                            Email = "p@p.p",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "P@P.P",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIbn35deIKBruk03bWo2fhq5mcdHZpOeU7yyUZCGDLOmYiLe632mvMx7RbOTUDsUcQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "be6a4035-033e-4bb5-9ad0-3c654aa2abf2",
+                            TwoFactorEnabled = false,
+                            UserName = "p@p.p",
+                            FirstName = "Passenger",
+                            LastName = "Passenger"
+                        });
                 });
 
             modelBuilder.Entity("CarPoolLibrary.Models.Manifest", b =>
