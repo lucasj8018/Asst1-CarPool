@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using CarPoolMvc.Data;
+using CarPoolLibrary.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

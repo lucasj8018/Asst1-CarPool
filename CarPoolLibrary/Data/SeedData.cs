@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CarPoolLibrary.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarPoolMvc.Data;
+namespace CarPoolLibrary.Data;
 
 public static class SeedData
 {

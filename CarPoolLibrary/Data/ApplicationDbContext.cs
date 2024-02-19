@@ -1,8 +1,8 @@
-﻿using CarPoolLibrary.Models;
+using CarPoolLibrary.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarPoolMvc.Data;
+namespace CarPoolLibrary.Data;
 
 public class ApplicationDbContext : IdentityDbContext
 {
