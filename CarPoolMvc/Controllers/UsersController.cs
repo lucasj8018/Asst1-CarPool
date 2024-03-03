@@ -3,8 +3,11 @@ using CarPoolLibrary.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarPoolMvc.Controllers;
+
+[Authorize(Roles = "Admin")]
 public class UsersController : Controller
 {
     private readonly UserManager<IdentityUser> _userManager;

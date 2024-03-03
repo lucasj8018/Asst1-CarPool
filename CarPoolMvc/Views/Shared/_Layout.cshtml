@@ -20,8 +20,6 @@
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li><a href="/" class="nav-link px-2 text-white fs-5">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Privacy"
-                            class="nav-link px-2 text-white fs-5">Privacy</a></li>
                     @if (User.Identity!.IsAuthenticated && User.IsInRole("Admin"))
                     {
                         <li><a asp-area="" asp-controller="Users" asp-action="Index"
@@ -33,11 +31,14 @@
                     {
                         <li><a asp-area="" asp-controller="Vehicles" asp-action="Index"
                                 class="nav-link px-2 text-white fs-5">Vehicles</a></li>
+                        <li><a asp-area="" asp-controller="Manifests" asp-action="Index"
+                                class="nav-link px-2 text-white fs-5">Manifests</a></li>
                     }
-                    <li><a asp-area="" asp-controller="Trips" asp-action="Index"
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a asp-area="" asp-controller="Trips" asp-action="Index"
                             class="nav-link px-2 text-white fs-5">Trips</a></li>
-                    <li><a asp-area="" asp-controller="Manifests" asp-action="Index"
-                            class="nav-link px-2 text-white fs-5">Manifests</a></li>
+                    }
                 </ul>
 
                 <partial name="_LoginPartial" />
@@ -53,7 +54,9 @@
 
     <footer class="border-top footer text-muted p-1 bg-dark text-white fs-5">
         <div class="container text-white">
-            &copy; 2024 CarPoolMvc. All rights reserved. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &copy; 2024 CarPoolMvc. All rights reserved. 
+                <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-white">Privacy.</a> 
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             Team Members: Baek, Jayden | Chung, Taehyuk | Jian, Jin Rong | Ly, Tracy
         </div>
         </div>

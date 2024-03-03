@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarPoolLibrary.Models;
 using CarPoolLibrary.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarPoolMvc.Controllers
 {
+    [Authorize(Roles = "Admin, Owner")]
     [Route("Manifests")]
     public class ManifestsController : Controller
     {
