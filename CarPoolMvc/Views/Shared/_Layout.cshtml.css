@@ -17,6 +17,15 @@ a {
   border-color: #1861ac;
 }
 
+.container{
+  
+}
+
+body {
+  background-color: #dfdfdf; /* 원하는 배경색으로 변경 */
+  /* 추가적으로 변경하고 싶은 스타일 속성들 */
+}
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;
