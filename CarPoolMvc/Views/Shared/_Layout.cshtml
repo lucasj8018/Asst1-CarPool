@@ -1,71 +1,67 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CarPoolMvc</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/CarPoolMvc.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CarPoolMvc</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        @if (User.Identity!.IsAuthenticated && User.IsInRole("Admin")){
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Index">Member</a>
-                        </li>
-                        }
-                        @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Owner"))){
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Vehicles" asp-action="Index">Vehicle</a>
-                        </li>}
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Trips" asp-action="Index">Trip</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Manifests" asp-action="Index">Manifest</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
+
+<body style="background-color: #f0eded;">
+    <header class="p-2 bg-dark text-white">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <span class="px-3 fs-3">CarPoolMvc</span>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="/" class="nav-link px-2 text-white fs-5">Home</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Privacy"
+                            class="nav-link px-2 text-white fs-5">Privacy</a></li>
+                    @if (User.Identity!.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <li><a asp-area="" asp-controller="Users" asp-action="Index"
+                                class="nav-link px-2 text-white fs-5">Users</a></li>
+                        <li><a asp-area="" asp-controller="Members" asp-action="Index"
+                                class="nav-link px-2 text-white fs-5">Members</a></li>
+                    }
+                    @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Owner")))
+                    {
+                        <li><a asp-area="" asp-controller="Vehicles" asp-action="Index"
+                                class="nav-link px-2 text-white fs-5">Vehicles</a></li>
+                    }
+                    <li><a asp-area="" asp-controller="Trips" asp-action="Index"
+                            class="nav-link px-2 text-white fs-5">Trips</a></li>
+                    <li><a asp-area="" asp-controller="Manifests" asp-action="Index"
+                            class="nav-link px-2 text-white fs-5">Manifests</a></li>
+                </ul>
+
+                <partial name="_LoginPartial" />
             </div>
-        </nav>
+        </div>
     </header>
+
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3 mt-5 ">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            @* &copy; 2024 - CarPoolMvc - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
+    <footer class="border-top footer text-muted p-1 bg-dark text-white fs-5">
+        <div class="container text-white">
             &copy; 2024 CarPoolMvc. All rights reserved. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             Team Members: Baek, Jayden | Chung, Taehyuk | Jian, Jin Rong | Ly, Tracy
-        </div>       
-    </div>
+        </div>
+        </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
