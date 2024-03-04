@@ -7,13 +7,13 @@
 <h1>Vehicles</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Add">Add New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.VehicleId)
+                Vehicle ID
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Model)
@@ -25,13 +25,13 @@
                 @Html.DisplayNameFor(model => model.Year)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumberOfSeats)
+                Number Of Seats
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.VehicleType)
+                Vehicle Type
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MemberId)
+                Member ID
             </th>
             <th></th>
         </tr>
