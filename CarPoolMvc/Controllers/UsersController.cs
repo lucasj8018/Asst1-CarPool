@@ -22,7 +22,10 @@ public class UsersController : Controller
     public async Task<IActionResult> Index()
     {
         var usersWithRoles = await GetUsersWithRolesAsync();
-        return View(usersWithRoles);
+        var sortedUsersWithRoles = usersWithRoles
+        .OrderBy(uwr => string.Join(", ", uwr.Roles))
+        .ToList();
+        return View(sortedUsersWithRoles);
     }
 
     private async Task<List<UserWithRole>> GetUsersWithRolesAsync()

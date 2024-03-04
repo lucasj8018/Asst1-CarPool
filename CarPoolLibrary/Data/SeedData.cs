@@ -120,9 +120,9 @@ public static class SeedData
         List<Member> members = new List<Member>() {
             new Member() {
                 MemberId=1,
-                FirstName="Sam",
-                LastName="Fox",
-                Email="sam@fox.com",
+                FirstName="Adam",
+                LastName="Admin",
+                Email="a@a.a",
                 Mobile="778-111-2222",
                 Street="457 Fox Avenue",
                 City="Richmond",
@@ -131,9 +131,9 @@ public static class SeedData
             },
             new Member() {    // 1
                 MemberId=2,
-                FirstName="Ann",
-                LastName="Day",
-                Email="ann@day.com",
+                FirstName="Oscar",
+                LastName="Owner",
+                Email="o@o.o",
                 Mobile="604-333-6666",
                 Street="231 Reiver Road",
                 City="Delta",
@@ -142,9 +142,9 @@ public static class SeedData
             },
                 new Member() {    // 1
                 MemberId=3,
-                FirstName="Lucas",
-                LastName="Jian",
-                Email="lucas@jian.com",
+                FirstName="Peter",
+                LastName="Passenger",
+                Email="p@p.p",
                 Mobile="604-333-6666",
                 Street="231 Reiver Road",
                 City="Delta",
