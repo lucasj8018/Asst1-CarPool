@@ -109,6 +109,11 @@ namespace CarPoolMvc.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
+
+            //redirect user to complete the Member page after successful User signup
+            //this is a temp solution to generate an associated Member record for the User record
+            string redirectToMembersPage = "/Members/Create";
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
@@ -154,7 +159,7 @@ namespace CarPoolMvc.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        return LocalRedirect(Url.Content(redirectToMembersPage));
                     }
                 }
                 foreach (var error in result.Errors)
