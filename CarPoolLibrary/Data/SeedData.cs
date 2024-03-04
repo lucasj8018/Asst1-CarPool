@@ -67,10 +67,47 @@ public static class SeedData
         passengerUser.NormalizedUserName = passengerUser.Email.ToUpper();
         passengerUser.PasswordHash = passwordHasher.HashPassword(passengerUser, pwd);
 
+        var passengerUserSam = new User
+        {
+            Id = Guid.NewGuid().ToString(),
+            UserName = "sam@fox.com",
+            Email = "sam@fox.com",
+            EmailConfirmed = true,
+            FirstName = "Sam",
+            LastName = "Fox"
+        };
+        passengerUserSam.NormalizedUserName = passengerUserSam.Email.ToUpper();
+        passengerUserSam.PasswordHash = passwordHasher.HashPassword(passengerUserSam, pwd);
+
+        var passengerUserAnn = new User
+        {
+            Id = Guid.NewGuid().ToString(),
+            UserName = "ann@day.com",
+            Email = "ann@day.com",
+            EmailConfirmed = true,
+            FirstName = "Ann",
+            LastName = "Day"
+        };
+        passengerUserSam.NormalizedUserName = passengerUserSam.Email.ToUpper();
+        passengerUserSam.PasswordHash = passwordHasher.HashPassword(passengerUserSam, pwd);
+
+        var passengerUserLucas = new User
+        {
+            Id = Guid.NewGuid().ToString(),
+            UserName = "lucas@jian.com",
+            Email = "lucas@jian.com",
+            EmailConfirmed = true,
+            FirstName = "Lucas",
+            LastName = "Jian"
+        };
+
         List<User> users = new List<User>(){
             adminUser,
             ownerUser,
-            passengerUser
+            passengerUser,
+            passengerUserSam,
+            passengerUserAnn,
+            passengerUserLucas
         };
 
         modelBuilder.Entity<User>().HasData(users);
@@ -92,6 +129,24 @@ public static class SeedData
         userRoles.Add(new IdentityUserRole<string>
         {
             UserId = users[2].Id,
+            RoleId = roles.First(q => q.Name == "Passenger").Id
+        });
+
+        userRoles.Add(new IdentityUserRole<string>
+        {
+            UserId = users[3].Id,
+            RoleId = roles.First(q => q.Name == "Passenger").Id
+        });
+
+        userRoles.Add(new IdentityUserRole<string>
+        {
+            UserId = users[4].Id,
+            RoleId = roles.First(q => q.Name == "Passenger").Id
+        });
+
+        userRoles.Add(new IdentityUserRole<string>
+        {
+            UserId = users[5].Id,
             RoleId = roles.First(q => q.Name == "Passenger").Id
         });
 
