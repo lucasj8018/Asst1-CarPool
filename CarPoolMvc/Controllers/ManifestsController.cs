@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CarPoolMvc.Controllers
 {
-    [Authorize(Roles = "Admin, Owner")]
+    [Authorize(Roles = "Admin, Owner, Passenger")]
     [Route("Manifests")]
     public class ManifestsController : Controller
     {
