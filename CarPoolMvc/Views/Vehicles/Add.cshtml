@@ -1,16 +1,15 @@
 @model CarPoolLibrary.Models.Vehicle
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Add a Vehicle";
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>Vehicle</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Add">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Model" class="control-label"></label>
@@ -33,16 +32,16 @@
                 <span asp-validation-for="NumberOfSeats" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="VehicleType" class="control-label"></label>
+                <label asp-for="VehicleType" class="control-label">Vehicle Type</label>
                 <input asp-for="VehicleType" class="form-control" />
                 <span asp-validation-for="VehicleType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MemberId" class="control-label"></label>
+                <label asp-for="MemberId" class="control-label">Member</label>
                 <select asp-for="MemberId" class ="form-control" asp-items="ViewBag.MemberId"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Add" class="btn btn-primary" />
             </div>
         </form>
     </div>

@@ -47,19 +47,19 @@ namespace CarPoolMvc.Controllers
             return View(vehicle);
         }
 
-        // GET: Vehicles/Create
-        public IActionResult Create()
+        // GET: Vehicles/Add
+        public IActionResult Add()
         {
             ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "Email");
             return View();
         }
 
-        // POST: Vehicles/Create
+        // POST: Vehicles/Add
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VehicleId,Model,Make,Year,NumberOfSeats,VehicleType,MemberId,Created,Modified,CreatedBy,ModifiedBy")] Vehicle vehicle)
+        public async Task<IActionResult> Add([Bind("VehicleId,Model,Make,Year,NumberOfSeats,VehicleType,MemberId,Created,Modified,CreatedBy,ModifiedBy")] Vehicle vehicle)
         {
             if (ModelState.IsValid)
             {
