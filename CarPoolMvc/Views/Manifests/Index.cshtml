@@ -1,10 +1,10 @@
 @model IEnumerable<CarPoolLibrary.Models.Manifest>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Manifests";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.Notes)
             </th>
             <th>
-                Member's Email
+                Member Email
             </th>
             <th></th>
         </tr>

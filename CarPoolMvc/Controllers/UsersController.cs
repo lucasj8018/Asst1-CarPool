@@ -3,8 +3,11 @@ using CarPoolLibrary.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarPoolMvc.Controllers;
+
+[Authorize(Roles = "Admin")]
 public class UsersController : Controller
 {
     private readonly UserManager<IdentityUser> _userManager;
@@ -19,7 +22,10 @@ public class UsersController : Controller
     public async Task<IActionResult> Index()
     {
         var usersWithRoles = await GetUsersWithRolesAsync();
-        return View(usersWithRoles);
+        var sortedUsersWithRoles = usersWithRoles
+        .OrderBy(uwr => string.Join(", ", uwr.Roles))
+        .ToList();
+        return View(sortedUsersWithRoles);
     }
 
     private async Task<List<UserWithRole>> GetUsersWithRolesAsync()
