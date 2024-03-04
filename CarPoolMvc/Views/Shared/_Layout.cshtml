@@ -20,24 +20,29 @@
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li><a href="/" class="nav-link px-2 text-white fs-5">Home</a></li>
-                    @if (User.Identity!.IsAuthenticated && User.IsInRole("Admin"))
+                    @if (User.Identity!.IsAuthenticated)
                     {
-                        <li><a asp-area="" asp-controller="Users" asp-action="Index"
-                                class="nav-link px-2 text-white fs-5">Users</a></li>
-                        <li><a asp-area="" asp-controller="Members" asp-action="Index"
-                                class="nav-link px-2 text-white fs-5">Members</a></li>
-                    }
-                    @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Owner")))
-                    {
-                        <li><a asp-area="" asp-controller="Vehicles" asp-action="Index"
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li><a asp-area="" asp-controller="Users" asp-action="Index"
+                                    class="nav-link px-2 text-white fs-5">Users</a></li>
+                            <li><a asp-area="" asp-controller="Members" asp-action="Index"
+                                    class="nav-link px-2 text-white fs-5">Members</a></li>
+                        }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Owner"))
+                        {
+                            <li><a asp-area="" asp-controller="Vehicles" asp-action="Index"
                                 class="nav-link px-2 text-white fs-5">Vehicles</a></li>
-                        <li><a asp-area="" asp-controller="Manifests" asp-action="Index"
-                                class="nav-link px-2 text-white fs-5">Manifests</a></li>
-                    }
-                    @if (User.Identity.IsAuthenticated)
-                    {
+                        }
+
                         <li><a asp-area="" asp-controller="Trips" asp-action="Index"
                             class="nav-link px-2 text-white fs-5">Trips</a></li>
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("Owner"))
+                        {
+                            <li><a asp-area="" asp-controller="Manifests" asp-action="Index"
+                                class="nav-link px-2 text-white fs-5">Manifests</a></li>
+                        }
                     }
                 </ul>
 
