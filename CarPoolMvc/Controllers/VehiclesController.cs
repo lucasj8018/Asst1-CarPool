@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CarPoolLibrary.Models;
 using CarPoolLibrary.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace CarPoolMvc.Controllers
 {
@@ -15,17 +16,44 @@ namespace CarPoolMvc.Controllers
     public class VehiclesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public VehiclesController(ApplicationDbContext context)
+        public VehiclesController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Vehicles
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Vehicles!.Include(v => v.Member);
-            return View(await applicationDbContext.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+            List<Vehicle> vehicles;
+
+            if (isAdmin)
+            {
+                vehicles = await _context.Vehicles.ToListAsync();
+            }
+            else
+            {
+                var email = user?.Email; // Fetching Email of the logged-in user
+                if (email == null)
+                {
+                    return NotFound("User email not found.");
+                }
+
+                var member = await _context.Members.FirstOrDefaultAsync(m => m.Email == email);
+                if (member == null)
+                {
+                    return NotFound("Member not found for the current user.");
+                }
+
+                vehicles = await _context.Vehicles.Where(v => v.MemberId == member.MemberId).ToListAsync();
+            }
+
+            return View(vehicles);
         }
 
         // GET: Vehicles/Details/5
