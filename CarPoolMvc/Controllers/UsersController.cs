@@ -4,19 +4,27 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using CarPoolLibrary.Data;
 
 namespace CarPoolMvc.Controllers;
 
 [Authorize(Roles = "Admin")]
 public class UsersController : Controller
 {
+    private readonly ApplicationDbContext _context;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly ILogger<UsersController> _logger;
 
-    public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+    public UsersController(ApplicationDbContext context, 
+            UserManager<IdentityUser> userManager, 
+            RoleManager<IdentityRole> roleManager,
+            ILogger<UsersController> logger)
     {
+        _context = context;
         _userManager = userManager;
         _roleManager = roleManager;
+        _logger = logger;
     }
 
     public async Task<IActionResult> Index()
@@ -97,9 +105,28 @@ public class UsersController : Controller
             return NotFound();
         }
 
+        // Get the currently logged in user
+        var loggedInUser = await _userManager.GetUserAsync(User);
+        if (loggedInUser != null && loggedInUser.Id == user.Id)
+        {
+            // Return an error message if they are the same
+            ModelState.AddModelError(string.Empty, "You cannot delete the account of the currently logged in user.");
+            _logger.LogWarning("User tried to delete their own account.");
+            return RedirectToAction(nameof(Index));
+        }
+
         var result = await _userManager.DeleteAsync(user);
         if (result.Succeeded)
         {
+            // Find the Member with the same email as the User
+            var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == user.Email);
+            if (member != null)
+            {
+                // Delete the Member with the same email as the User
+                _context.Members!.Remove(member);
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
