@@ -50,6 +50,7 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Trips/Create
+        [Authorize(Roles = "Admin, Owner")]
         [HttpGet("Create")]
         public IActionResult Create()
         {
@@ -60,6 +61,7 @@ namespace CarPoolMvc.Controllers
         // POST: Trips/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Owner")]
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TripId,VehicleId,Date,Time,Destination,MeetingAddress,Created,Modified,CreatedBy,ModifiedBy")] Trip trip)
@@ -75,6 +77,7 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Trips/Edit/5/5
+        [Authorize(Roles = "Admin, Owner")]
         [HttpGet("Edit/{tripId}/{vehicleId}")]
         public async Task<IActionResult> Edit(int? tripId, int? vehicleId)
         {
@@ -99,6 +102,7 @@ namespace CarPoolMvc.Controllers
         // POST: Trips/Edit/5/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Owner")]
         [HttpPost("Edit/{tripId}/{vehicleId}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int tripId, int vehicleId, [Bind("TripId,VehicleId,Date,Time,Destination,MeetingAddress,Created,Modified,CreatedBy,ModifiedBy")] Trip trip)
@@ -133,6 +137,7 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Trips/Delete/5/5
+        [Authorize(Roles = "Admin, Owner")]
         [HttpGet("Delete/{tripId}/{vehicleId}")]
         public async Task<IActionResult> Delete(int? tripId, int? vehicleId)
         {
@@ -153,6 +158,7 @@ namespace CarPoolMvc.Controllers
         }
 
         // POST: Trips/Delete/5/5
+        [Authorize(Roles = "Admin, Owner")]
         [HttpPost("Delete/{tripId}/{vehicleId}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int tripId, int vehicleId)

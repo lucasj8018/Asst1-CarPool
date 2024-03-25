@@ -1,4 +1,5 @@
 @rendermode InteractiveServer
+@using Microsoft.EntityFrameworkCore;
 @inject CarPoolLibrary.Data.ApplicationDbContext dbContext
 @inject Microsoft.AspNetCore.Identity.UserManager<Microsoft.AspNetCore.Identity.IdentityUser> UserManager
 @inject Microsoft.AspNetCore.Identity.RoleManager<Microsoft.AspNetCore.Identity.IdentityRole> RoleManager
@@ -84,7 +85,6 @@
   bool allowVirtualization = false; // a RadzenDataList property
 
   IQueryable<CarPoolLibrary.Models.Vehicle> vehicles = new List<CarPoolLibrary.Models.Vehicle>().AsQueryable();
-  IEnumerable<CarPoolLibrary.Models.Member> members = new List<CarPoolLibrary.Models.Member>();
 
   protected override async Task OnInitializedAsync()
   {
@@ -99,8 +99,7 @@
     // load all vehicles for all members if the user is an admin
     if (isAdmin)
     {
-      members = dbContext.Members!.ToList();
-      vehicles = dbContext.Vehicles!.OrderBy(v => v.Member!.FirstName);
+      vehicles = dbContext.Vehicles!.Include(v => v.Member).OrderBy(v => v.Member!.FirstName);
     }
     else
     {

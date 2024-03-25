@@ -17,6 +17,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+// Enable the cascading authentication state in Blazor components
+builder.Services.AddCascadingAuthenticationState();
+
 // For razor/blazor components
 builder.Services
 .AddRazorComponents()
