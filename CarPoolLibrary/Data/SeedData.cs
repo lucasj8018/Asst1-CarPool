@@ -67,7 +67,7 @@ public static class SeedData
         passengerUser.NormalizedUserName = passengerUser.Email.ToUpper();
         passengerUser.PasswordHash = passwordHasher.HashPassword(passengerUser, pwd);
 
-        var passengerUserSam = new User
+        var ownerUserSam = new User
         {
             Id = Guid.NewGuid().ToString(),
             UserName = "sam@fox.com",
@@ -76,10 +76,10 @@ public static class SeedData
             FirstName = "Sam",
             LastName = "Fox"
         };
-        passengerUserSam.NormalizedUserName = passengerUserSam.Email.ToUpper();
-        passengerUserSam.PasswordHash = passwordHasher.HashPassword(passengerUserSam, pwd);
+        ownerUserSam.NormalizedUserName = ownerUserSam.Email.ToUpper();
+        ownerUserSam.PasswordHash = passwordHasher.HashPassword(ownerUserSam, pwd);
 
-        var passengerUserAnn = new User
+        var ownerUserAnn = new User
         {
             Id = Guid.NewGuid().ToString(),
             UserName = "ann@day.com",
@@ -88,10 +88,10 @@ public static class SeedData
             FirstName = "Ann",
             LastName = "Day"
         };
-        passengerUserSam.NormalizedUserName = passengerUserSam.Email.ToUpper();
-        passengerUserSam.PasswordHash = passwordHasher.HashPassword(passengerUserSam, pwd);
+        ownerUserSam.NormalizedUserName = ownerUserSam.Email.ToUpper();
+        ownerUserSam.PasswordHash = passwordHasher.HashPassword(ownerUserSam, pwd);
 
-        var passengerUserLucas = new User
+        var ownerUserLucas = new User
         {
             Id = Guid.NewGuid().ToString(),
             UserName = "lucas@jian.com",
@@ -105,9 +105,9 @@ public static class SeedData
             adminUser,
             ownerUser,
             passengerUser,
-            passengerUserSam,
-            passengerUserAnn,
-            passengerUserLucas
+            ownerUserSam,
+            ownerUserAnn,
+            ownerUserLucas
         };
 
         modelBuilder.Entity<User>().HasData(users);
@@ -135,19 +135,19 @@ public static class SeedData
         userRoles.Add(new IdentityUserRole<string>
         {
             UserId = users[3].Id,
-            RoleId = roles.First(q => q.Name == "Passenger").Id
+            RoleId = roles.First(q => q.Name == "Owner").Id
         });
 
         userRoles.Add(new IdentityUserRole<string>
         {
             UserId = users[4].Id,
-            RoleId = roles.First(q => q.Name == "Passenger").Id
+            RoleId = roles.First(q => q.Name == "Owner").Id
         });
 
         userRoles.Add(new IdentityUserRole<string>
         {
             UserId = users[5].Id,
-            RoleId = roles.First(q => q.Name == "Passenger").Id
+            RoleId = roles.First(q => q.Name == "Owner").Id
         });
 
         modelBuilder.Entity<IdentityUserRole<string>>().HasData(userRoles);

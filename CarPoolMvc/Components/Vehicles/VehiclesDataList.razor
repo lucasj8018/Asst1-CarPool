@@ -1,0 +1,108 @@
+@rendermode InteractiveServer
+@inject CarPoolLibrary.Data.ApplicationDbContext dbContext
+@inject Microsoft.AspNetCore.Identity.UserManager<Microsoft.AspNetCore.Identity.IdentityUser> UserManager
+@inject Microsoft.AspNetCore.Identity.RoleManager<Microsoft.AspNetCore.Identity.IdentityRole> RoleManager
+@inject NavigationManager NavigationManager
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<RadzenDataList AllowVirtualization="@allowVirtualization"
+  Style="@(allowVirtualization ? "height:400px;overflow:auto;" : "")" WrapItems="@(!allowVirtualization)"
+  AllowPaging="@(!allowVirtualization)" Data="@vehicles" TItem="CarPoolLibrary.Models.Vehicle" PageSize="5"
+  PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+  <Template Context="vehicles">
+    <RadzenCard Style="width: 100%; padding: 0;">
+      <RadzenRow Gap="0" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+
+        @* Display the vehicle ID *@
+        <RadzenColumn Size="1" Class="rz-p-4">
+          <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Text">
+            ID # @(vehicles.VehicleId.ToString())
+          </RadzenBadge>
+        </RadzenColumn>
+
+        @* Display the owner name *@
+        <RadzenColumn Size="2" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Owner</RadzenText>
+          @* <RadzenText TextStyle="TextStyle.Body2">@FindOwner(vehicles.MemberId)</RadzenText> *@
+          <RadzenText TextStyle="TextStyle.Body2">@vehicles.Member?.FirstName @vehicles.Member?.LastName</RadzenText>
+        </RadzenColumn>
+
+        @* Display the model and make *@
+        <RadzenColumn Size="2" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Model</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2" Class="rz-mb-2">@vehicles.Model</RadzenText>
+
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Make</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@(vehicles.Make)</RadzenText>
+        </RadzenColumn>
+
+        @* Display the year and type *@
+        <RadzenColumn Size="2" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Year</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2" Class="rz-mb-2">@(vehicles.Year)</RadzenText>
+
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Type</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@(vehicles.VehicleType)</RadzenText>
+        </RadzenColumn>
+
+        @* Display the available seats *@
+        <RadzenColumn Size="2" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0"># of Seats</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@(vehicles.NumberOfSeats)</RadzenText>
+        </RadzenColumn>
+
+        @* Edit or Delete a Vehicle *@
+        <RadzenStack Orientation="Orientation.Horizontal" Class="rz-p-4" Gap="10" JustifyContent="JustifyContent.End">
+          <RadzenButton Text="Edit" Click="@(() => Edit(@vehicles.VehicleId.ToString()))" Variant="Variant.Outlined" />
+          <RadzenButton Text="Delete" Click="@(() => Delete(@vehicles.VehicleId.ToString()))" Variant="Variant.Outlined"
+            ButtonStyle="ButtonStyle.Danger" />
+        </RadzenStack>
+
+      </RadzenRow>
+    </RadzenCard>
+  </Template>
+</RadzenDataList>
+
+
+@code {
+  bool allowVirtualization = false; // a RadzenDataList property
+  IQueryable<CarPoolLibrary.Models.Vehicle> vehicles = new List<CarPoolLibrary.Models.Vehicle>().AsQueryable();
+  IEnumerable<CarPoolLibrary.Models.Member> members = new List<CarPoolLibrary.Models.Member>();
+
+  protected override async Task OnInitializedAsync()
+  {
+    await base.OnInitializedAsync();
+    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    var result = authState.User;
+    var user = await UserManager.GetUserAsync(result);
+    if (user == null) return; //early exit if no user logged in
+
+    var isAdmin = await UserManager.IsInRoleAsync(user, "Admin");
+
+    // load all vehicles for all members if the user is an admin
+    if (isAdmin)
+    {
+      members = dbContext.Members!.ToList();
+      vehicles = dbContext.Vehicles!.OrderBy(v => v.Member!.FirstName);
+    }
+    else
+    {
+      var email = user?.Email; // Find member by email
+      var member = dbContext.Members!.FirstOrDefault(m => m.Email == email);
+      vehicles = dbContext.Vehicles!.Where(v => v.MemberId == member!.MemberId);
+    }
+  }
+
+  private void Edit(string id)
+  {
+    NavigationManager.NavigateTo($"/Vehicles/Edit/{id}");
+  }
+
+  private void Delete(string id)
+  {
+    NavigationManager.NavigateTo($"/Vehicles/Delete/{id}");
+  }
+
+}
