@@ -25,12 +25,13 @@
         </RadzenColumn>
 
         @* Edit or Delete a Role *@
-        <RadzenColumn Size="3" Class="rz-p-4">
+        <RadzenStack Orientation="Orientation.Horizontal" Class="rz-p-4" Gap="10" JustifyContent="JustifyContent.End">
           <RadzenButton Text="Edit" Click="@(() => Edit(usersWithRoles.User!.Id))" Variant="Variant.Outlined"
             />
           <RadzenButton Text="Delete" Click="@(() => Delete(usersWithRoles.User!.Id))" Variant="Variant.Outlined"
             ButtonStyle="ButtonStyle.Danger" />
-        </RadzenColumn>
+        </RadzenStack>
+
       </RadzenRow>
     </RadzenCard>
   </Template>
