@@ -1,7 +1,7 @@
 @rendermode InteractiveServer
 @inject CarPoolLibrary.Data.ApplicationDbContext dbContext
-@inject Microsoft.AspNetCore.Identity.UserManager<Microsoft.AspNetCore.Identity.IdentityUser> _userManager
-@inject Microsoft.AspNetCore.Identity.RoleManager<Microsoft.AspNetCore.Identity.IdentityRole> _roleManager
+@inject Microsoft.AspNetCore.Identity.UserManager<Microsoft.AspNetCore.Identity.IdentityUser> UserManager
+@inject Microsoft.AspNetCore.Identity.RoleManager<Microsoft.AspNetCore.Identity.IdentityRole> RoleManager
 @inject NavigationManager NavigationManager
 
 <RadzenDataList AllowVirtualization="@allowVirtualization"
@@ -52,12 +52,12 @@
   protected override async Task OnInitializedAsync()
   {
     await base.OnInitializedAsync();
-    users =  _userManager.Users;
-    roles = _roleManager.Roles;
+    users =  UserManager.Users;
+    roles = RoleManager.Roles;
   
     foreach (var user in users)
     {
-      var result = await _userManager.GetRolesAsync(user); // get user's role
+      var result = await UserManager.GetRolesAsync(user); // get user's role
       var userRole = result.ToList();
 
       CarPoolLibrary.Models.UserWithRole tempUser = new CarPoolLibrary.Models.UserWithRole{

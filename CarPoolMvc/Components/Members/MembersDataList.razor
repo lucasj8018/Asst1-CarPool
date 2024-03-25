@@ -1,5 +1,5 @@
 @rendermode InteractiveServer
-@inject CarPoolLibrary.Data.ApplicationDbContext _context
+@inject CarPoolLibrary.Data.ApplicationDbContext dbContext
 @inject NavigationManager NavigationManager
 
 <RadzenDataList AllowVirtualization="@allowVirtualization"
@@ -60,7 +60,7 @@
   protected override async Task OnInitializedAsync()
   {
     await base.OnInitializedAsync();
-    members = _context.Members!.OrderBy(mem => mem.FirstName).ToList();
+    members = dbContext.Members!.OrderBy(mem => mem.FirstName).ToList();
   }
 
   private void Edit(string id)
