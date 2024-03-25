@@ -9,17 +9,17 @@ using CarPoolLibrary.Data;
 namespace CarPoolMvc.Controllers;
 
 [Authorize(Roles = "Admin")]
-public class UsersController : Controller
+public class RolesController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly ILogger<UsersController> _logger;
+    private readonly ILogger<RolesController> _logger;
 
-    public UsersController(ApplicationDbContext context, 
+    public RolesController(ApplicationDbContext context, 
             UserManager<IdentityUser> userManager, 
             RoleManager<IdentityRole> roleManager,
-            ILogger<UsersController> logger)
+            ILogger<RolesController> logger)
     {
         _context = context;
         _userManager = userManager;
