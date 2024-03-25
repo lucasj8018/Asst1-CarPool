@@ -7,67 +7,82 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
-<RadzenDataList AllowVirtualization="@allowVirtualization"
-  Style="@(allowVirtualization ? "height:400px;overflow:auto;" : "")" WrapItems="@(!allowVirtualization)"
-  AllowPaging="@(!allowVirtualization)" Data="@vehicles" TItem="CarPoolLibrary.Models.Vehicle" PageSize="5"
-  PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-  <Template Context="vehicles">
-    <RadzenCard Style="width: 100%; padding: 0;">
-      <RadzenRow Gap="0" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+<RadzenFieldset Style="width: 100%; margin: 40px auto;">
+  @* The label for the field set *@
+  <HeaderTemplate>
+    <small class="d-inline-flex align-items-center align-middle">
+      <b>Vehicle count: @count</b>
+    </small>
+  </HeaderTemplate>
 
-        @* Display the vehicle ID *@
-        <RadzenColumn Size="1" Class="rz-p-4">
-          <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Text">
-            ID # @(vehicles.VehicleId.ToString())
-          </RadzenBadge>
-        </RadzenColumn>
+  <ChildContent>
+    <RadzenDataList AllowVirtualization="@allowVirtualization"
+      Style="@(allowVirtualization ? "height:400px;overflow:auto;" : "")" WrapItems="@(!allowVirtualization)"
+      AllowPaging="@(!allowVirtualization)" Data="@vehicles" TItem="CarPoolLibrary.Models.Vehicle" PageSize="6"
+      PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+      <Template Context="vehicles">
+        <RadzenCard Style="width: 30%; padding: 0;">
+          <RadzenRow Gap="0" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
 
-        @* Display the owner name *@
-        <RadzenColumn Size="2" Class="rz-p-4">
-          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Owner</RadzenText>
-          @* <RadzenText TextStyle="TextStyle.Body2">@FindOwner(vehicles.MemberId)</RadzenText> *@
-          <RadzenText TextStyle="TextStyle.Body2">@vehicles.Member?.FirstName @vehicles.Member?.LastName</RadzenText>
-        </RadzenColumn>
+            @* Display the vehicle owner name *@
+            <RadzenRow Gap="10" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween"
+              Class="rz-p-4" Style="width: 1000%;">
+              @* <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Text">
+                ID # @(vehicles.VehicleId.ToString())
+              </RadzenBadge> *@
+              <RadzenBadge BadgeStyle="BadgeStyle.Primary"  Variant="Variant.Text" >
+                Owner: @vehicles.Member?.FirstName @vehicles.Member?.LastName
+              </RadzenBadge>
+            </RadzenRow>
 
-        @* Display the model and make *@
-        <RadzenColumn Size="2" Class="rz-p-4">
-          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Model</RadzenText>
-          <RadzenText TextStyle="TextStyle.Body2" Class="rz-mb-2">@vehicles.Model</RadzenText>
+            @* Display vehicle info *@
+            <RadzenRow Class="rz-p-4" Gap="0" Style="width: 100%;">
+              <RadzenColumn Size="4">
+                <RadzenText TextStyle="TextStyle.Body2"><strong>Model </strong></RadzenText>
+                <RadzenText TextStyle="TextStyle.Body2">@vehicles.Model</RadzenText>
+              </RadzenColumn>
 
-          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Make</RadzenText>
-          <RadzenText TextStyle="TextStyle.Body2">@(vehicles.Make)</RadzenText>
-        </RadzenColumn>
+              <RadzenColumn Size="4">
+                <RadzenText TextStyle="TextStyle.Body2"><strong>Make </strong></RadzenText>
+                <RadzenText TextStyle="TextStyle.Body2">@vehicles.Make</RadzenText>
+              </RadzenColumn>
 
-        @* Display the year and type *@
-        <RadzenColumn Size="2" Class="rz-p-4">
-          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Year</RadzenText>
-          <RadzenText TextStyle="TextStyle.Body2" Class="rz-mb-2">@(vehicles.Year)</RadzenText>
+              <RadzenColumn Size="4">
+                <RadzenText TextStyle="TextStyle.Body2"><strong>Year </strong></RadzenText>
+                <RadzenText TextStyle="TextStyle.Body2">@vehicles.Year</RadzenText>
+              </RadzenColumn>
 
-          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Type</RadzenText>
-          <RadzenText TextStyle="TextStyle.Body2">@(vehicles.VehicleType)</RadzenText>
-        </RadzenColumn>
+              <RadzenColumn Size="4">
+                <RadzenText TextStyle="TextStyle.Body2"><strong>Type </strong></RadzenText>
+                <RadzenText TextStyle="TextStyle.Body2">@vehicles.VehicleType</RadzenText>
+              </RadzenColumn>
 
-        @* Display the available seats *@
-        <RadzenColumn Size="2" Class="rz-p-4">
-          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0"># of Seats</RadzenText>
-          <RadzenText TextStyle="TextStyle.Body2">@(vehicles.NumberOfSeats)</RadzenText>
-        </RadzenColumn>
+              <RadzenColumn Size="4">
+                <RadzenText TextStyle="TextStyle.Body2"><strong>Seats </strong></RadzenText>
+                <RadzenText TextStyle="TextStyle.Body2">@vehicles.NumberOfSeats</RadzenText>
+              </RadzenColumn>
 
-        @* Edit or Delete a Vehicle *@
-        <RadzenStack Orientation="Orientation.Horizontal" Class="rz-p-4" Gap="10" JustifyContent="JustifyContent.End">
-          <RadzenButton Text="Edit" Click="@(() => Edit(@vehicles.VehicleId.ToString()))" Variant="Variant.Outlined" />
-          <RadzenButton Text="Delete" Click="@(() => Delete(@vehicles.VehicleId.ToString()))" Variant="Variant.Outlined"
-            ButtonStyle="ButtonStyle.Danger" />
-        </RadzenStack>
+            </RadzenRow>
 
-      </RadzenRow>
-    </RadzenCard>
-  </Template>
-</RadzenDataList>
+            @* Edit or Delete a Vehicle *@
+            <RadzenStack Orientation="Orientation.Horizontal" Class="rz-p-4" Style="width:100%;" Gap="10"
+              JustifyContent="JustifyContent.End">
+              <RadzenButton Text="Edit" Click="@(() => Edit(@vehicles.VehicleId.ToString()))"
+                Variant="Variant.Outlined" />
+              <RadzenButton Text="Delete" Click="@(() => Delete(@vehicles.VehicleId.ToString()))"
+                Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" />
+            </RadzenStack>
 
+          </RadzenRow>
+        </RadzenCard>
+      </Template>
+    </RadzenDataList>
+  </ChildContent>
+</RadzenFieldset>
 
 @code {
   bool allowVirtualization = false; // a RadzenDataList property
+
   IQueryable<CarPoolLibrary.Models.Vehicle> vehicles = new List<CarPoolLibrary.Models.Vehicle>().AsQueryable();
   IEnumerable<CarPoolLibrary.Models.Member> members = new List<CarPoolLibrary.Models.Member>();
 
@@ -94,6 +109,8 @@
       vehicles = dbContext.Vehicles!.Where(v => v.MemberId == member!.MemberId);
     }
   }
+
+  private int count => vehicles.Count();
 
   private void Edit(string id)
   {
