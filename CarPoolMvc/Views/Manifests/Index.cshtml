@@ -4,11 +4,12 @@
     ViewData["Title"] = "Manifests";
 }
 
+<link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
+
 <h1>@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<component type="typeof(ManifestsButtonsCreate)" render-mode="ServerPrerendered" />
+
 <table class="table">
     <thead>
         <tr>
