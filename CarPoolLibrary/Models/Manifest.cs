@@ -13,8 +13,8 @@ public class Manifest
 
     [Required]
     public int? TripId { get; set; }
+    
     public string? DestinationAddress { get; set; }
-
 
     public string? Notes { get; set; }
 
@@ -28,4 +28,7 @@ public class Manifest
 
     [ForeignKey("MemberId")]
     public Member? Member { get; set; }
+
+    [ForeignKey("TripId")]
+    public Trip? Trip { get; set; }
 }

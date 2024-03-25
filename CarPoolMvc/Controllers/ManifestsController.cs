@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CarPoolLibrary.Models;
 using CarPoolLibrary.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace CarPoolMvc.Controllers
 {
@@ -16,17 +17,44 @@ namespace CarPoolMvc.Controllers
     public class ManifestsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ManifestsController(ApplicationDbContext context)
+        private IEnumerable<Manifest> manifests = new List<Manifest>();
+
+        public ManifestsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Manifests
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Manifests!.Include(m => m.Member);
-            return View(await applicationDbContext.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+            var isAdmin = await _userManager.IsInRoleAsync(user!, "Admin");
+            if (isAdmin)
+            {
+                manifests = await _context.Manifests!.Include(m => m.Member).ToListAsync();
+
+            }
+            else
+            {
+                var email = user?.Email; // Fetching Email of the logged-in user
+                if (email == null)
+                {
+                    return NotFound("User email not found.");
+                }
+
+                var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == email);
+                if (member == null)
+                {
+                    return NotFound("Member not found for the current user.");
+                }
+                manifests = await _context.Manifests!.Where(v => v.MemberId == member.MemberId).ToListAsync();
+
+            }
+
+            return View(manifests);
         }
 
         // GET: Manifests/Details/5/5
