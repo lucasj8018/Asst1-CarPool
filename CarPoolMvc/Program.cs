@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using CarPoolLibrary.Data;
+using CarPoolMvc.Components;
+using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,15 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+// For razor/blazor components
+builder.Services
+.AddRazorComponents()
+.AddInteractiveServerComponents()
+.AddCircuitOptions(options => options.DetailedErrors = true); // for debugging razor components
+
+// Add Radzen services
+builder.Services.AddRadzenComponents();
 
 var app = builder.Build();
 
@@ -33,6 +44,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAntiforgery();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -47,6 +59,10 @@ app.MapControllerRoute(
 // });
 
 app.MapRazorPages();
+
+// Map the razor components
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
 
 using (var scope = app.Services.CreateScope())
 {
