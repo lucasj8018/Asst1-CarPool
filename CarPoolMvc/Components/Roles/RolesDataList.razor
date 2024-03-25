@@ -1,0 +1,80 @@
+@rendermode InteractiveServer
+@inject CarPoolLibrary.Data.ApplicationDbContext dbContext
+@inject Microsoft.AspNetCore.Identity.UserManager<Microsoft.AspNetCore.Identity.IdentityUser> _userManager
+@inject Microsoft.AspNetCore.Identity.RoleManager<Microsoft.AspNetCore.Identity.IdentityRole> _roleManager
+@inject NavigationManager NavigationManager
+
+<RadzenDataList AllowVirtualization="@allowVirtualization"
+  Style="@(allowVirtualization ? "height:400px;overflow:auto;" : "")" WrapItems="@(!allowVirtualization)"
+  AllowPaging="@(!allowVirtualization)" Data="@usersWithRoles" TItem="CarPoolLibrary.Models.UserWithRole" PageSize="5"
+  PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+  <Template Context="usersWithRoles">
+    <RadzenCard Style="width: 100%; padding: 0;">
+      <RadzenRow Gap="0" AlignItems="AlignItems.Center"  JustifyContent="JustifyContent.SpaceBetween">
+
+        @* Display the role name *@
+        <RadzenColumn Size="3" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Role</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@usersWithRoles.Roles.First()</RadzenText>
+        </RadzenColumn>
+
+        @* Display the email *@
+        <RadzenColumn Size="6" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Email</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@(usersWithRoles.User!.Email)</RadzenText>
+        </RadzenColumn>
+
+        @* Edit or Delete a Role *@
+        <RadzenColumn Size="3" Class="rz-p-4">
+          <RadzenButton Text="Edit" Click="@(() => Edit(usersWithRoles.User!.Id))" Variant="Variant.Outlined"
+            />
+          <RadzenButton Text="Delete" Click="@(() => Delete(usersWithRoles.User!.Id))" Variant="Variant.Outlined"
+            ButtonStyle="ButtonStyle.Danger" />
+        </RadzenColumn>
+      </RadzenRow>
+    </RadzenCard>
+  </Template>
+</RadzenDataList>
+
+
+@code {
+  bool allowVirtualization = false; // a RadzenDataList property
+
+  // store the Identity users
+  IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>? roles;
+  // store the Identity roles
+  IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>? users;
+  // after the list of users and roles are initialized, store the users with their assigned role
+  IEnumerable<CarPoolLibrary.Models.UserWithRole> usersWithRoles = new List<CarPoolLibrary.Models.UserWithRole>();
+    
+
+  protected override async Task OnInitializedAsync()
+  {
+    await base.OnInitializedAsync();
+    users =  _userManager.Users;
+    roles = _roleManager.Roles;
+  
+    foreach (var user in users)
+    {
+      var result = await _userManager.GetRolesAsync(user); // get user's role
+      var userRole = result.ToList();
+
+      CarPoolLibrary.Models.UserWithRole tempUser = new CarPoolLibrary.Models.UserWithRole{
+        User = user, Roles = userRole.ToList()
+      };
+      usersWithRoles = usersWithRoles.Append(tempUser);
+      usersWithRoles = usersWithRoles.OrderBy(usr => usr.Roles.First()).ToList();
+    }
+  }
+
+  private void Edit(string id)
+  {
+    NavigationManager.NavigateTo($"/Roles/Edit/{id}");
+  }
+
+  private void Delete(string id)
+  {
+    NavigationManager.NavigateTo($"/Roles/Delete/{id}");
+  }
+
+}
