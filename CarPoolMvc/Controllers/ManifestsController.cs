@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CarPoolLibrary.Models;
 using CarPoolLibrary.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace CarPoolMvc.Controllers
 {
@@ -16,17 +17,66 @@ namespace CarPoolMvc.Controllers
     public class ManifestsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ManifestsController(ApplicationDbContext context)
+        private IEnumerable<Manifest> manifests = new List<Manifest>();
+
+        public ManifestsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Manifests
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Manifests!.Include(m => m.Member);
-            return View(await applicationDbContext.ToListAsync());
+            // Fetching the logged-in user
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+            var email = user?.Email;
+            if (email == null)
+            {
+                return NotFound("User email not found.");
+            }
+            // Check if the user is a member, redirect to resgister if not
+            var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == email);
+            if (member == null)
+            {
+                // return NotFound("Member not found for the current user.");
+                return RedirectToAction("Create", "Members");
+            }
+            
+            // Check role
+            var isAdmin = await _userManager.IsInRoleAsync(user!, "Admin");
+            var isOwner = await _userManager.IsInRoleAsync(user!, "Owner");
+            var isPassenger = await _userManager.IsInRoleAsync(user!, "Passenger");
+
+            // Load all manifests if the user is an admin
+            if (isAdmin)
+            {
+                manifests = await _context.Manifests!
+                    .Include(m => m.Member)
+                    .Include(m => m.Trip!.Members).ToListAsync();
+            }
+            // show only the owner's trips
+            if (isOwner)
+            {
+                manifests = await _context.Manifests!.Where(m => m.MemberId == member.MemberId)
+                    .Include(m => m.Trip!.Members).ToListAsync();
+            }
+            // show only manifests where the passenger is registered for
+            if (isPassenger)
+            {
+                manifests = await _context.Manifests!
+                .Include(m => m.Member)
+                .Include(m => m.Trip!.Members)
+                .Where(m => m.Trip!.Members!.Any(p => p.MemberId == member!.MemberId))
+                .ToListAsync();
+            }
+            return View(manifests);
         }
 
         // GET: Manifests/Details/5/5

@@ -28,13 +28,13 @@ namespace CarPoolMvc.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            var isAdmin = await _userManager.IsInRoleAsync(user!, "Admin");
 
             List<Vehicle> vehicles;
 
             if (isAdmin)
             {
-                vehicles = await _context.Vehicles.ToListAsync();
+                vehicles = await _context.Vehicles!.ToListAsync();
             }
             else
             {
@@ -44,13 +44,13 @@ namespace CarPoolMvc.Controllers
                     return NotFound("User email not found.");
                 }
 
-                var member = await _context.Members.FirstOrDefaultAsync(m => m.Email == email);
+                var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == email);
                 if (member == null)
                 {
                     return NotFound("Member not found for the current user.");
                 }
 
-                vehicles = await _context.Vehicles.Where(v => v.MemberId == member.MemberId).ToListAsync();
+                vehicles = await _context.Vehicles!.Where(v => v.MemberId == member.MemberId).ToListAsync();
             }
 
             return View(vehicles);

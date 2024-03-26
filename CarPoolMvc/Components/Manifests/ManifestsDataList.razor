@@ -1,0 +1,140 @@
+@rendermode InteractiveServer
+@using Microsoft.EntityFrameworkCore;
+@inject CarPoolLibrary.Data.ApplicationDbContext dbContext
+@inject Microsoft.AspNetCore.Identity.UserManager<Microsoft.AspNetCore.Identity.IdentityUser> UserManager
+@inject Microsoft.AspNetCore.Identity.RoleManager<Microsoft.AspNetCore.Identity.IdentityRole> RoleManager
+@inject NavigationManager NavigationManager
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<RadzenDataList AllowVirtualization="@allowVirtualization"
+  Style="@(allowVirtualization ? "height:400px;overflow:auto;" : "")" WrapItems="@(!allowVirtualization)"
+  AllowPaging="@(!allowVirtualization)" Data="@manifests" TItem="CarPoolLibrary.Models.Manifest" PageSize="5"
+  PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+  <Template Context="manifests">
+    <RadzenCard Style="width: 100%; padding: 0;">
+      <RadzenRow Gap="0" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+
+        @* Display the manifest ID *@
+        <RadzenColumn Size="1" Class="rz-p-4">
+          <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Text">
+            ID # @(manifests.ManifestId.ToString())
+          </RadzenBadge>
+        </RadzenColumn>
+
+        @* Display the driver info *@
+        <RadzenColumn Size="2" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Driver</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@manifests.Member!.FirstName @manifests.Member!.LastName</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@manifests.Member!.Email</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@manifests.Member!.Mobile</RadzenText>
+        </RadzenColumn>
+
+        @* Display the trip info *@
+        <RadzenColumn Size="3" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Destination</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@manifests.Trip?.Destination</RadzenText>
+
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mt-2">Meeting Address</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@manifests.Trip?.MeetingAddress</RadzenText>
+
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mt-2">Date and Time</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@manifests.Trip?.Date @manifests.Trip?.Time</RadzenText>
+        </RadzenColumn>
+
+        @* Display the Passengers *@
+        <RadzenColumn Size="3" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mb-0">Passengers</RadzenText>
+          @if (manifests.Trip?.Members == null || manifests.Trip?.Members.Count == 0)
+          {
+            <RadzenText TextStyle="TextStyle.Body2">No passengers</RadzenText>
+          }
+          else
+          {
+            @foreach (var passenger in manifests.Trip!.Members)
+            {
+              <RadzenText TextStyle="TextStyle.Body2">@passenger.FirstName @passenger.LastName</RadzenText>
+            }
+          }
+        </RadzenColumn>
+
+        @* Display the notes *@
+        <RadzenColumn Size="3" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mb-0">Notes</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@manifests.Notes</RadzenText>
+        </RadzenColumn>
+
+        @* Edit or Delete a trip (Admin or Owner only) *@
+        <AuthorizeView Roles="Admin, Owner">
+          <RadzenStack Orientation="Orientation.Horizontal" Class="rz-p-4 w-100" Gap="10"
+            JustifyContent="JustifyContent.End">
+            <RadzenButton Text="Edit" Click="@(() => Edit(@manifests.ManifestId, @manifests.Member!.MemberId))"
+              Variant="Variant.Outlined" />
+            <RadzenButton Text="Delete" Click="@(() => Delete(@manifests.ManifestId, @manifests.Member!.MemberId))"
+              Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" />
+          </RadzenStack>
+        </AuthorizeView>
+
+      </RadzenRow>
+    </RadzenCard>
+  </Template>
+</RadzenDataList>
+
+
+@code {
+  bool allowVirtualization = false; // a RadzenDataList property
+  IEnumerable<CarPoolLibrary.Models.Manifest> manifests = new List<CarPoolLibrary.Models.Manifest>();
+
+  protected override async Task OnInitializedAsync()
+  {
+    await base.OnInitializedAsync();
+    // Fetching the logged-in user
+    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    var result = authState.User;
+    var user = await UserManager.GetUserAsync(result);
+    var email = user?.Email; // Find member by email
+    var member = dbContext.Members?.FirstOrDefault(m => m.Email == email);
+
+    if (user != null && member != null)
+    {
+      var isAdmin = await UserManager.IsInRoleAsync(user, "Admin");
+      var isOwner = await UserManager.IsInRoleAsync(user, "Owner");
+      var isPassenger = await UserManager.IsInRoleAsync(user, "Passenger");
+
+      // load all manifests if the user is an admin
+      if (isAdmin)
+      {
+        manifests = await dbContext.Manifests!
+          .Include(m => m.Member)
+          .Include(m => m.Trip!.Members).ToListAsync();
+      }
+      // Show only the owner's trips
+      if (member != null && isOwner)
+      {
+        manifests = await dbContext.Manifests!.Where(m => m.MemberId == member!.MemberId)
+        .Include(m => m.Trip!.Members).ToListAsync();
+      }
+      // show only manifests where the passenger is registered for
+      if (member != null && isPassenger)
+      {
+        manifests = await dbContext.Manifests!
+          .Include(m => m.Member)
+          .Include(m => m.Trip!.Members)
+          .Where(m => m.Trip!.Members!.Any(p => p.MemberId == member!.MemberId))
+          .ToListAsync();
+      }
+    }
+  }
+
+  private void Edit(int manifestId, int memberId)
+  {
+    NavigationManager.NavigateTo($"/Manifests/Edit/{manifestId}/{memberId}");
+  }
+
+  private void Delete(int manifestId, int memberId)
+  {
+    NavigationManager.NavigateTo($"/Manifests/Delete/{manifestId}/{memberId}");
+  }
+
+}

@@ -18,9 +18,13 @@ public class Trip
     [Required]
     public TimeOnly? Time { get; set; }
 
+    [Required]
+    [StringLength(50)]
     [Display(Name = "Destination Adress")]
     public string? Destination { get; set; }
 
+    [Required]
+    [StringLength(50)]
     [Display(Name = "Meeting Address")]
     public string? MeetingAddress { get; set; }
 
@@ -34,5 +38,8 @@ public class Trip
 
     [ForeignKey("VehicleId")]
     public Vehicle? Vehicle { get; set; }
+
+    // Stores the passengers of the trips the member is a driver for
+    public List<Member>? Members { get; set; } = [];
 
 }

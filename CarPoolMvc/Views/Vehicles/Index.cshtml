@@ -1,15 +1,23 @@
 @model IEnumerable<CarPoolLibrary.Models.Vehicle>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Vehicle List";
 }
 
-<h1>Vehicles</h1>
+<link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
 
-<p>
+<h1>@ViewData["Title"]</h1>
+
+<component type="typeof(VehiclesButtonsAdd)" render-mode="ServerPrerendered" />
+
+<component type="typeof(VehiclesDataList)" render-mode="ServerPrerendered" />
+
+@* <p>
     <a asp-action="Add">Add New</a>
-</p>
-<table class="table">
+</p> *@
+
+
+@* <table class="table">
     <thead>
         <tr>
             <th>
@@ -68,4 +76,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table> *@
