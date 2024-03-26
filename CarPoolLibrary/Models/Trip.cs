@@ -18,9 +18,13 @@ public class Trip
     [Required]
     public TimeOnly? Time { get; set; }
 
+    [Required]
+    [StringLength(50)]
     [Display(Name = "Destination Adress")]
     public string? Destination { get; set; }
 
+    [Required]
+    [StringLength(50)]
     [Display(Name = "Meeting Address")]
     public string? MeetingAddress { get; set; }
 
