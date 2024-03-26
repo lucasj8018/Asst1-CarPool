@@ -230,5 +230,53 @@ namespace CarPoolMvc.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        // create a method to unregister a passenger from a trip
+        // GET: Trips/Unregister/{tripId}
+        [Authorize(Roles = "Admin, Passenger")]
+        [HttpGet("Unregister/{tripId}")]
+        public async Task<IActionResult> Unregister(int? tripId)
+        {
+            var trip = await _context.Trips!
+                .Include(t => t.Vehicle)
+                .FirstOrDefaultAsync(m => m.TripId == tripId);
+                
+            if (tripId == null || trip == null)
+            {
+                return NotFound();
+            }
+
+            return View(trip);
+        }
+
+        // POST: Trips/Unregister
+        // Allow a Passenger to unregister from a trip
+        [Authorize(Roles = "Admin, Passenger"), ActionName("Unregister")]
+        [HttpPost("Unregister/{tripId}")]
+        public async Task<IActionResult> UnregisterPassenger(int tripId)
+        {
+            // Find the Member associated with the logged-in user
+            var user = await _userManager.GetUserAsync(User);
+            var email = user?.Email;
+            if (email == null)
+            {
+                return NotFound("User email not found.");
+            }
+            var member = await _context.Members!.Include(m => m.Trips).FirstOrDefaultAsync(m => m.Email == email);
+            if (member == null)
+            {
+                return RedirectToAction("Create", "Members");
+            }
+            
+            var currentTrip = await _context.Trips!.Include(t => t.Members).FirstOrDefaultAsync(t => t.TripId == tripId);
+            // Only Passenger members can unregister from trips
+            if (member != null && currentTrip != null)
+            {
+                member.Trips!.Remove(currentTrip);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
