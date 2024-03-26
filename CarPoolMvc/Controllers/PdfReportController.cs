@@ -1,4 +1,5 @@
 using CarPoolLibrary.Models;
+using iText.IO.Image;
 using iText.Kernel.Colors;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
@@ -7,7 +8,6 @@ using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarPoolMvc.Controllers
@@ -33,19 +33,22 @@ namespace CarPoolMvc.Controllers
             Document document = new Document(pdfDoc, PageSize.A4, false);
             writer.SetCloseStream(false);
 
-            Paragraph header = new Paragraph("The Manifest Report")
-              .SetTextAlignment(TextAlignment.CENTER)
-              .SetFontSize(20);
+            ImageData imageData = ImageDataFactory.Create("wwwroot/images/logo.png");
+            Image logo = new Image(imageData).SetWidth(80).SetFixedPosition(36, PageSize.A4.GetTop() - 102);
+            document.Add(logo);
 
-            document.Add(header);
+            Paragraph banner = new Paragraph("The Manifest Report")
+                .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetFontSize(20)
+                .SetMarginTop(20)
+                .SetPadding(10);
+            document.Add(banner);
 
             Paragraph subheader = new Paragraph(DateTime.Now.ToShortDateString())
               .SetTextAlignment(TextAlignment.CENTER)
               .SetFontSize(15);
             document.Add(subheader);
-
-            // empty line
-            document.Add(new Paragraph(""));
 
             // Line separator
             LineSeparator ls = new LineSeparator(new SolidLine());
@@ -54,17 +57,12 @@ namespace CarPoolMvc.Controllers
             // empty line
             document.Add(new Paragraph(""));
 
-            // Add table containing data
             document.Add(await GetPdfTable());
 
-            // Page Numbers
-            int n = pdfDoc.GetNumberOfPages();
-            for (int i = 1; i <= n; i++)
+            for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
             {
-                document.ShowTextAligned(new Paragraph(String
-                  .Format("Page " + i + " of " + n)),
-                  559, 806, i, TextAlignment.RIGHT,
-                  VerticalAlignment.TOP, 0);
+                document.ShowTextAligned(new Paragraph(String.Format("Page " + i + " of " + pdfDoc.GetNumberOfPages())),
+                    559, 806, i, TextAlignment.RIGHT, VerticalAlignment.TOP, 0);
             }
 
             document.Close();
@@ -74,7 +72,6 @@ namespace CarPoolMvc.Controllers
 
             FileStreamResult fileStreamResult = new FileStreamResult(ms, "application/pdf");
 
-            //Uncomment this to return the file as a download
             fileStreamResult.FileDownloadName = "ManifestReport.pdf";
 
             return fileStreamResult;
@@ -82,11 +79,8 @@ namespace CarPoolMvc.Controllers
 
         private async Task<Table> GetPdfTable()
         {
-            float[] columnWidths = {1, 2, 3, 4, 5};
+            float[] columnWidths = { 1, 2, 3, 4, 5 };
             Table table = new Table(UnitValue.CreatePercentArray(columnWidths)).UseAllAvailableWidth();
-
-            // Table
-            // Table table = new Table(5, false);
 
             // Headings
             Cell cellManifestId = new Cell(1, 1)
@@ -97,7 +91,7 @@ namespace CarPoolMvc.Controllers
             Cell cellMemberId = new Cell(1, 1)
                .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
                .SetTextAlignment(TextAlignment.CENTER)
-               .Add(new Paragraph("Member ID"));
+               .Add(new Paragraph("Member\nID"));
 
             Cell cellDestination = new Cell(1, 1)
                .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
@@ -145,11 +139,11 @@ namespace CarPoolMvc.Controllers
 
                 Cell cNotes = new Cell(1, 1)
                     .SetTextAlignment(TextAlignment.CENTER)
-                    .Add(new Paragraph(item.Notes.ToString()));
+                    .Add(new Paragraph(item.Notes?.ToString()));
 
-Cell cEmail = new Cell(1, 1)
-    .SetTextAlignment(TextAlignment.CENTER)
-    .Add(new Paragraph(item.Member?.Email ?? "No Email"));
+                Cell cEmail = new Cell(1, 1)
+                    .SetTextAlignment(TextAlignment.CENTER)
+                    .Add(new Paragraph(item.Member?.Email?.ToString() ?? "No Email"));
 
                 table.AddCell(cManifestId);
                 table.AddCell(cMemberId);
@@ -163,8 +157,8 @@ Cell cEmail = new Cell(1, 1)
 
         private async Task<Manifest[]> GetManifestsAsync()
         {
-            var manifest = await _context.Manifests.ToArrayAsync();
-            return manifest!;
+            var manifests = await _context.Manifests!.Include(m => m.Member).ToArrayAsync();
+            return manifests!;
         }
     }
 }

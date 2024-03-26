@@ -1,14 +1,23 @@
 @model IEnumerable<CarPoolLibrary.Models.Manifest>
-
 @{
     ViewData["Title"] = "Manifests";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <h1 style="margin: 0;">@ViewData["Title"]</h1>
+    <div
+        style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <a asp-controller="PdfReport" asp-action="Index" title="Download PDF Report">
+            <img src="~/images/pdf_image.png" alt="PDF Report" style="width: 50px; height: 50px;" />
+            <div>Download</div>
+        </a>
+    </div>
+</div>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
@@ -31,29 +40,33 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ManifestId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MemberId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TripId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Notes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Member!.Email)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-manifestId="@item.ManifestId" asp-route-memberId="@item.MemberId">Edit</a> |
-                <a asp-action="Details" asp-route-manifestId="@item.ManifestId" asp-route-memberId="@item.MemberId">Details</a> |
-                <a asp-action="Delete" asp-route-manifestId="@item.ManifestId" asp-route-memberId="@item.MemberId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ManifestId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MemberId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TripId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Notes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Member!.Email)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-manifestId="@item.ManifestId"
+                        asp-route-memberId="@item.MemberId">Edit</a> |
+                    <a asp-action="Details" asp-route-manifestId="@item.ManifestId"
+                        asp-route-memberId="@item.MemberId">Details</a> |
+                    <a asp-action="Delete" asp-route-manifestId="@item.ManifestId"
+                        asp-route-memberId="@item.MemberId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
