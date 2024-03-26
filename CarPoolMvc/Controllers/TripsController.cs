@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using CarPoolLibrary.Models;
 using CarPoolLibrary.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CarPoolMvc.Controllers
 {
@@ -16,10 +18,12 @@ namespace CarPoolMvc.Controllers
     public class TripsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public TripsController(ApplicationDbContext context)
+        public TripsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Trips
@@ -50,6 +54,7 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Trips/Create
+        [Authorize(Roles = "Admin, Owner")]
         [HttpGet("Create")]
         public IActionResult Create()
         {
@@ -60,9 +65,10 @@ namespace CarPoolMvc.Controllers
         // POST: Trips/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Owner")]
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TripId,VehicleId,Date,Time,Destination,MeetingAddress,Created,Modified,CreatedBy,ModifiedBy")] Trip trip)
+        public async Task<IActionResult> Create([Bind("TripId,VehicleId,Date,Time,Destination,MeetingAddress,Created,Modified,CreatedBy,ModifiedBy,Members")] Trip trip)
         {
             if (ModelState.IsValid)
             {
@@ -75,6 +81,7 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Trips/Edit/5/5
+        [Authorize(Roles = "Admin, Owner")]
         [HttpGet("Edit/{tripId}/{vehicleId}")]
         public async Task<IActionResult> Edit(int? tripId, int? vehicleId)
         {
@@ -99,9 +106,10 @@ namespace CarPoolMvc.Controllers
         // POST: Trips/Edit/5/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Owner")]
         [HttpPost("Edit/{tripId}/{vehicleId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int tripId, int vehicleId, [Bind("TripId,VehicleId,Date,Time,Destination,MeetingAddress,Created,Modified,CreatedBy,ModifiedBy")] Trip trip)
+        public async Task<IActionResult> Edit(int tripId, int vehicleId, [Bind("TripId,VehicleId,Date,Time,Destination,MeetingAddress,Created,Modified,CreatedBy,ModifiedBy,Members")] Trip trip)
         {
             if (tripId != trip.TripId || vehicleId != trip.VehicleId)
             {
@@ -133,6 +141,7 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Trips/Delete/5/5
+        [Authorize(Roles = "Admin, Owner")]
         [HttpGet("Delete/{tripId}/{vehicleId}")]
         public async Task<IActionResult> Delete(int? tripId, int? vehicleId)
         {
@@ -153,6 +162,7 @@ namespace CarPoolMvc.Controllers
         }
 
         // POST: Trips/Delete/5/5
+        [Authorize(Roles = "Admin, Owner")]
         [HttpPost("Delete/{tripId}/{vehicleId}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int tripId, int vehicleId)
@@ -171,6 +181,54 @@ namespace CarPoolMvc.Controllers
         private bool TripExists(int tripId, int vehicleId)
         {
             return _context.Trips!.Any(e => e.TripId == tripId && e.VehicleId == vehicleId);
+        }
+
+        // GET: Trips/Register/{tripId}
+        [Authorize(Roles = "Admin, Passenger")]
+        [HttpGet("Register/{tripId}")]
+        public async Task<IActionResult> Register(int? tripId)
+        {
+            var trip = await _context.Trips!
+                .Include(t => t.Vehicle)
+                .FirstOrDefaultAsync(m => m.TripId == tripId);
+                
+            if (tripId == null || trip == null)
+            {
+                return NotFound();
+            }
+
+            return View(trip);
+        }
+
+        // POST: Trips/Register
+        // Allow a Passenger to register for a trip
+        // Redirect to Members/Create if they are not already a member
+        [Authorize(Roles = "Admin, Passenger"), ActionName("Register")]
+        [HttpPost("Register/{tripId}")]
+        public async Task<IActionResult> RegisterPassenger(int tripId)
+        {
+            // Find the Member associated with the logged-in user
+            var user = await _userManager.GetUserAsync(User);
+            var email = user?.Email;
+            if (email == null)
+            {
+                return NotFound("User email not found.");
+            }
+            var member = await _context.Members!.Include(m => m.Trips).FirstOrDefaultAsync(m => m.Email == email);
+            if (member == null)
+            {
+                return RedirectToAction("Create", "Members");
+            }
+            
+            var currentTrip = await _context.Trips!.Include(t => t.Members).FirstOrDefaultAsync(t => t.TripId == tripId);
+            // Only Passenger members can register for trips
+            if (member != null && currentTrip != null)
+            {
+                member.Trips!.Add(currentTrip);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

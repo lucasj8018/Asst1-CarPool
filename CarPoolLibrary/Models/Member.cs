@@ -33,4 +33,7 @@ public class Member
     public string? CreatedBy { get; set; } = "System";
 
     public string? ModifiedBy { get; set; } = "System";
+
+    // Stores the trips that the member is registered for
+    public List<Trip>? Trips { get; } = [];
 }

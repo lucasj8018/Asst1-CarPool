@@ -1,0 +1,99 @@
+@rendermode InteractiveServer
+@using Microsoft.EntityFrameworkCore;
+@inject CarPoolLibrary.Data.ApplicationDbContext dbContext
+@inject NavigationManager NavigationManager
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<RadzenDataList AllowVirtualization="@allowVirtualization"
+  Style="@(allowVirtualization ? "height:400px;overflow:auto;" : "")" WrapItems="@(!allowVirtualization)"
+  AllowPaging="@(!allowVirtualization)" Data="@trips" TItem="CarPoolLibrary.Models.Trip" PageSize="5"
+  PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+  <Template Context="trips">
+    <RadzenCard Style="width: 100%; padding: 0;">
+      <RadzenRow Gap="0" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+
+        @* Display the trip ID *@
+        <RadzenColumn Size="1" Class="rz-p-4">
+          <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Text">
+            ID # @(trips.TripId.ToString())
+          </RadzenBadge>
+        </RadzenColumn>
+
+        @* Display the date and time *@
+        <RadzenColumn Size="2" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Date</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@trips.Date</RadzenText>
+
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mt-2">Time</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@trips.Time</RadzenText>
+        </RadzenColumn>
+
+        @* Display the vehicle info *@
+        <RadzenColumn Size="2" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Vehicle</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@trips.Vehicle!.Make @trips.Vehicle!.Model</RadzenText>
+
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mt-2">Seats</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@trips.Vehicle!.NumberOfSeats</RadzenText>
+        </RadzenColumn>
+
+        @* Display the destination and meeting address *@
+        <RadzenColumn Size="3" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Destination</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@trips.Destination</RadzenText>
+
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mt-2">Meeting Address</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@trips.MeetingAddress</RadzenText>
+        </RadzenColumn>
+
+        @* Edit or Delete a trip (Admin or Owner only) *@
+        <AuthorizeView Roles="Admin, Owner">
+          <RadzenStack Orientation="Orientation.Horizontal" Class="rz-p-4" Gap="10" JustifyContent="JustifyContent.End">
+            <RadzenButton Text="Edit" Click="@(() => Edit(@trips.TripId, @trips.Vehicle!.VehicleId))"
+              Variant="Variant.Outlined" />
+            <RadzenButton Text="Delete" Click="@(() => Delete(@trips.TripId, @trips.Vehicle!.VehicleId))"
+              Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" />
+          </RadzenStack>
+        </AuthorizeView>
+
+        <AuthorizeView Roles="Admin, Passenger">
+          <RadzenStack Orientation="Orientation.Horizontal" Class="rz-p-4" Gap="10" JustifyContent="JustifyContent.End">
+            <RadzenButton Text="Register" Click="@(() => Register(@trips.TripId))"
+              Variant="Variant.Outlined" />
+          </RadzenStack>
+        </AuthorizeView>
+
+      </RadzenRow>
+    </RadzenCard>
+  </Template>
+</RadzenDataList>
+
+
+@code {
+  bool allowVirtualization = false; // a RadzenDataList property
+  IEnumerable<CarPoolLibrary.Models.Trip> trips = new List<CarPoolLibrary.Models.Trip>();
+
+  protected override async Task OnInitializedAsync()
+  {
+    await base.OnInitializedAsync();
+    trips = dbContext.Trips!.Include(t => t.Vehicle).Include(t => t.Members).ToList();
+  }
+
+  private void Edit(int tripId, int vehicleId)
+  {
+    NavigationManager.NavigateTo($"/Trips/Edit/{tripId}/{vehicleId}");
+  }
+
+  private void Delete(int tripId, int vehicleId)
+  {
+    NavigationManager.NavigateTo($"/Trips/Delete/{tripId}/{vehicleId}");
+  }
+
+  private void Register(int tripId)
+  {
+    NavigationManager.NavigateTo($"/Trips/Register/{tripId}");
+  }
+
+}

@@ -67,7 +67,7 @@ public static class SeedData
         passengerUser.NormalizedUserName = passengerUser.Email.ToUpper();
         passengerUser.PasswordHash = passwordHasher.HashPassword(passengerUser, pwd);
 
-        var passengerUserSam = new User
+        var ownerUserSam = new User
         {
             Id = Guid.NewGuid().ToString(),
             UserName = "sam@fox.com",
@@ -76,10 +76,10 @@ public static class SeedData
             FirstName = "Sam",
             LastName = "Fox"
         };
-        passengerUserSam.NormalizedUserName = passengerUserSam.Email.ToUpper();
-        passengerUserSam.PasswordHash = passwordHasher.HashPassword(passengerUserSam, pwd);
+        ownerUserSam.NormalizedUserName = ownerUserSam.Email.ToUpper();
+        ownerUserSam.PasswordHash = passwordHasher.HashPassword(ownerUserSam, pwd);
 
-        var passengerUserAnn = new User
+        var ownerUserAnn = new User
         {
             Id = Guid.NewGuid().ToString(),
             UserName = "ann@day.com",
@@ -88,10 +88,10 @@ public static class SeedData
             FirstName = "Ann",
             LastName = "Day"
         };
-        passengerUserSam.NormalizedUserName = passengerUserSam.Email.ToUpper();
-        passengerUserSam.PasswordHash = passwordHasher.HashPassword(passengerUserSam, pwd);
+        ownerUserAnn.NormalizedUserName = ownerUserAnn.Email.ToUpper();
+        ownerUserAnn.PasswordHash = passwordHasher.HashPassword(ownerUserAnn, pwd);
 
-        var passengerUserLucas = new User
+        var ownerUserLucas = new User
         {
             Id = Guid.NewGuid().ToString(),
             UserName = "lucas@jian.com",
@@ -100,55 +100,71 @@ public static class SeedData
             FirstName = "Lucas",
             LastName = "Jian"
         };
+        ownerUserLucas.NormalizedUserName = ownerUserLucas.Email.ToUpper();
+        ownerUserLucas.PasswordHash = passwordHasher.HashPassword(ownerUserLucas, pwd);
+
+        var passengerPeteSmith = new User
+        {
+            Id = Guid.NewGuid().ToString(),
+            UserName = "pete@smith.com",
+            Email = "pete@smith.com",
+            EmailConfirmed = true,
+            FirstName = "Pete",
+            LastName = "Smith"
+        };
+        passengerPeteSmith.NormalizedUserName = passengerPeteSmith.Email.ToUpper();
+        passengerPeteSmith.PasswordHash = passwordHasher.HashPassword(passengerPeteSmith, pwd);
 
         List<User> users = new List<User>(){
             adminUser,
             ownerUser,
             passengerUser,
-            passengerUserSam,
-            passengerUserAnn,
-            passengerUserLucas
+            ownerUserSam,
+            ownerUserAnn,
+            ownerUserLucas,
+            passengerPeteSmith
         };
 
         modelBuilder.Entity<User>().HasData(users);
 
-        List<IdentityUserRole<string>> userRoles = new List<IdentityUserRole<string>>();
-
-        userRoles.Add(new IdentityUserRole<string>
-        {
-            UserId = users[0].Id,
-            RoleId = roles.First(q => q.Name == "Admin").Id
-        });
-
-        userRoles.Add(new IdentityUserRole<string>
-        {
-            UserId = users[1].Id,
-            RoleId = roles.First(q => q.Name == "Owner").Id
-        });
-
-        userRoles.Add(new IdentityUserRole<string>
-        {
-            UserId = users[2].Id,
-            RoleId = roles.First(q => q.Name == "Passenger").Id
-        });
-
-        userRoles.Add(new IdentityUserRole<string>
-        {
-            UserId = users[3].Id,
-            RoleId = roles.First(q => q.Name == "Passenger").Id
-        });
-
-        userRoles.Add(new IdentityUserRole<string>
-        {
-            UserId = users[4].Id,
-            RoleId = roles.First(q => q.Name == "Passenger").Id
-        });
-
-        userRoles.Add(new IdentityUserRole<string>
-        {
-            UserId = users[5].Id,
-            RoleId = roles.First(q => q.Name == "Passenger").Id
-        });
+        List<IdentityUserRole<string>> userRoles =
+        [
+            new IdentityUserRole<string>
+            {
+                UserId = users[0].Id,
+                RoleId = roles.First(q => q.Name == "Admin").Id
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = users[1].Id,
+                RoleId = roles.First(q => q.Name == "Owner").Id
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = users[2].Id,
+                RoleId = roles.First(q => q.Name == "Passenger").Id
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = users[3].Id,
+                RoleId = roles.First(q => q.Name == "Owner").Id
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = users[4].Id,
+                RoleId = roles.First(q => q.Name == "Owner").Id
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = users[5].Id,
+                RoleId = roles.First(q => q.Name == "Owner").Id
+            },
+            new IdentityUserRole<string>
+            {
+                UserId = users[6].Id,
+                RoleId = roles.First(q => q.Name == "Passenger").Id
+            },
+        ];
 
         modelBuilder.Entity<IdentityUserRole<string>>().HasData(userRoles);
 
@@ -184,7 +200,7 @@ public static class SeedData
                 PostalCode="V4F 1M7",
                 Country="Canada",
             },
-            new Member() {    // 1
+            new Member() {    // 2
                 MemberId=2,
                 FirstName="Ann",
                 LastName="Day",
@@ -195,7 +211,7 @@ public static class SeedData
                 PostalCode="V6G 1M6",
                 Country="Canada",
             },
-                new Member() {    // 1
+                new Member() {    // 3
                 MemberId=3,
                 FirstName="Lucas",
                 LastName="Jian",
@@ -203,6 +219,17 @@ public static class SeedData
                 Mobile="604-333-6666",
                 Street="231 Reiver Road",
                 City="Delta",
+                PostalCode="V6G 1M6",
+                Country="Canada",
+            },
+            new Member() {    // 4
+                MemberId=4,
+                FirstName="Pete",
+                LastName="Smith",
+                Email="pete@smith.com",
+                Mobile="604-333-6666",
+                Street="231 Reiver Road",
+                City="Surrey",
                 PostalCode="V6G 1M6",
                 Country="Canada",
             },

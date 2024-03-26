@@ -1,15 +1,18 @@
 @model IEnumerable<CarPoolLibrary.Models.Trip>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Trips";
 }
 
-<h1>Trips</h1>
+<link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<h1>@ViewData["Title"]</h1>
+
+<component type="typeof(TripsButtonsCreate)" render-mode="ServerPrerendered" />
+
+<component type="typeof(TripsDataList)" render-mode="ServerPrerendered" />
+
+@* <table class="table">
     <thead>
         <tr>
             <th>
@@ -62,4 +65,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table> *@

@@ -145,7 +145,7 @@ namespace CarPoolMvc.Controllers
 
                 Cell cNotes = new Cell(1, 1)
                     .SetTextAlignment(TextAlignment.CENTER)
-                    .Add(new Paragraph(item.Notes.ToString()));
+                    .Add(new Paragraph(item.Notes?.ToString()));
 
 Cell cEmail = new Cell(1, 1)
     .SetTextAlignment(TextAlignment.CENTER)
@@ -163,7 +163,7 @@ Cell cEmail = new Cell(1, 1)
 
         private async Task<Manifest[]> GetManifestsAsync()
         {
-            var manifest = await _context.Manifests.ToArrayAsync();
+            var manifest = await _context.Manifests!.ToArrayAsync();
             return manifest!;
         }
     }

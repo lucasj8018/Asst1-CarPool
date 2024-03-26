@@ -23,6 +23,9 @@ public class ApplicationDbContext : IdentityDbContext
         // builder.Entity<Manifest>().HasKey(m => new { m.ManifestId, m.MemberId });
         builder.Entity<Trip>().HasIndex(e => new { e.TripId, e.VehicleId }).IsUnique();
         builder.Entity<Manifest>().HasIndex(e => new { e.ManifestId, e.MemberId }).IsUnique();
+        builder.Entity<Member>()
+        .HasMany(e => e.Trips)
+        .WithMany(e => e.Members);
 
         base.OnModelCreating(builder);
         builder.Entity<Member>().ToTable("Member");
