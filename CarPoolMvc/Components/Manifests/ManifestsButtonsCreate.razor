@@ -1,5 +1,11 @@
 @inject NavigationManager NavigationManager
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
+@* Admin or Owner only *@
+<AuthorizeView Roles="Admin, Owner">
 <RadzenStack Orientation="Orientation.Horizontal" Class="rz-mx-2 my-4" AlignItems="AlignItems.Center" Gap="1rem" Wrap="FlexWrap.Wrap">
   <RadzenButton Text="Create manifest" Variant="Variant.Flat" Click="@(() => NavigationManager.NavigateTo("/Manifests/Create"))" />
 </RadzenStack>
+</AuthorizeView>

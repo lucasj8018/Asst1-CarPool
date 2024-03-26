@@ -35,4 +35,7 @@ public class Trip
     [ForeignKey("VehicleId")]
     public Vehicle? Vehicle { get; set; }
 
+    // Stores the passengers of the trips the member is a driver for
+    public List<Member>? Members { get; set; } = [];
+
 }

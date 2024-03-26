@@ -46,7 +46,17 @@
         @* Display the Passengers *@
         <RadzenColumn Size="3" Class="rz-p-4">
           <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mb-0">Passengers</RadzenText>
-          <RadzenText TextStyle="TextStyle.Body2">@manifests.Notes</RadzenText>
+          @if (manifests.Trip?.Members == null || manifests.Trip?.Members.Count == 0)
+          {
+            <RadzenText TextStyle="TextStyle.Body2">No passengers</RadzenText>
+          }
+          else
+          {
+            @foreach (var passenger in manifests.Trip!.Members)
+            {
+              <RadzenText TextStyle="TextStyle.Body2">@passenger.FirstName @passenger.LastName</RadzenText>
+            }
+          }
         </RadzenColumn>
 
         @* Display the notes *@
@@ -57,7 +67,8 @@
 
         @* Edit or Delete a trip (Admin or Owner only) *@
         <AuthorizeView Roles="Admin, Owner">
-          <RadzenStack Orientation="Orientation.Horizontal" Class="rz-p-4 w-100" Gap="10" JustifyContent="JustifyContent.End">
+          <RadzenStack Orientation="Orientation.Horizontal" Class="rz-p-4 w-100" Gap="10"
+            JustifyContent="JustifyContent.End">
             <RadzenButton Text="Edit" Click="@(() => Edit(@manifests.ManifestId, @manifests.Member!.MemberId))"
               Variant="Variant.Outlined" />
             <RadzenButton Text="Delete" Click="@(() => Delete(@manifests.ManifestId, @manifests.Member!.MemberId))"
@@ -73,30 +84,46 @@
 
 @code {
   bool allowVirtualization = false; // a RadzenDataList property
-  IEnumerable<CarPoolLibrary.Models.Manifest>  manifests = new List<CarPoolLibrary.Models.Manifest>();
+  IEnumerable<CarPoolLibrary.Models.Manifest> manifests = new List<CarPoolLibrary.Models.Manifest>();
 
   protected override async Task OnInitializedAsync()
   {
     await base.OnInitializedAsync();
+    // Fetching the logged-in user
     var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
     var result = authState.User;
     var user = await UserManager.GetUserAsync(result);
-    if (user == null) return; //early exit if no user logged in
+    var email = user?.Email; // Find member by email
+    var member = dbContext.Members?.FirstOrDefault(m => m.Email == email);
 
-    var isAdmin = await UserManager.IsInRoleAsync(user, "Admin");
+    if (user != null && member != null)
+    {
+      var isAdmin = await UserManager.IsInRoleAsync(user, "Admin");
+      var isOwner = await UserManager.IsInRoleAsync(user, "Owner");
+      var isPassenger = await UserManager.IsInRoleAsync(user, "Passenger");
 
-    // load all vehicles for all members if the user is an admin
-    if (isAdmin)
-    {
-      manifests = await dbContext.Manifests!.Include(m => m.Member)
-        .Include(m => m.Trip).ToListAsync();
-    }
-    else
-    {
-      var email = user?.Email; // Find member by email
-      var member = dbContext.Members!.FirstOrDefault(m => m.Email == email);
-      manifests = await dbContext.Manifests!.Where(v => v.MemberId == member!.MemberId)
-        .Include(m => m.Trip).ToListAsync();
+      // load all manifests if the user is an admin
+      if (isAdmin)
+      {
+        manifests = await dbContext.Manifests!
+          .Include(m => m.Member)
+          .Include(m => m.Trip!.Members).ToListAsync();
+      }
+      // Show only the owner's trips
+      if (member != null && isOwner)
+      {
+        manifests = await dbContext.Manifests!.Where(m => m.MemberId == member!.MemberId)
+        .Include(m => m.Trip!.Members).ToListAsync();
+      }
+      // show only manifests where the passenger is registered for
+      if (member != null && isPassenger)
+      {
+        manifests = await dbContext.Manifests!
+          .Include(m => m.Member)
+          .Include(m => m.Trip!.Members)
+          .Where(m => m.Trip!.Members!.Any(p => p.MemberId == member!.MemberId))
+          .ToListAsync();
+      }
     }
   }
 

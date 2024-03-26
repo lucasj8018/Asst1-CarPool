@@ -30,30 +30,52 @@ namespace CarPoolMvc.Controllers
         // GET: Manifests
         public async Task<IActionResult> Index()
         {
+            // Fetching the logged-in user
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+            var email = user?.Email;
+            if (email == null)
+            {
+                return NotFound("User email not found.");
+            }
+            // Check if the user is a member, redirect to resgister if not
+            var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == email);
+            if (member == null)
+            {
+                // return NotFound("Member not found for the current user.");
+                return RedirectToAction("Create", "Members");
+            }
+            
+            // Check role
             var isAdmin = await _userManager.IsInRoleAsync(user!, "Admin");
+            var isOwner = await _userManager.IsInRoleAsync(user!, "Owner");
+            var isPassenger = await _userManager.IsInRoleAsync(user!, "Passenger");
+
+            // Load all manifests if the user is an admin
             if (isAdmin)
             {
-                manifests = await _context.Manifests!.Include(m => m.Member).ToListAsync();
-
+                manifests = await _context.Manifests!
+                    .Include(m => m.Member)
+                    .Include(m => m.Trip!.Members).ToListAsync();
             }
-            else
+            // show only the owner's trips
+            if (isOwner)
             {
-                var email = user?.Email; // Fetching Email of the logged-in user
-                if (email == null)
-                {
-                    return NotFound("User email not found.");
-                }
-
-                var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == email);
-                if (member == null)
-                {
-                    return NotFound("Member not found for the current user.");
-                }
-                manifests = await _context.Manifests!.Where(v => v.MemberId == member.MemberId).ToListAsync();
-
+                manifests = await _context.Manifests!.Where(m => m.MemberId == member.MemberId)
+                    .Include(m => m.Trip!.Members).ToListAsync();
             }
-
+            // show only manifests where the passenger is registered for
+            if (isPassenger)
+            {
+                manifests = await _context.Manifests!
+                .Include(m => m.Member)
+                .Include(m => m.Trip!.Members)
+                .Where(m => m.Trip!.Members!.Any(p => p.MemberId == member!.MemberId))
+                .ToListAsync();
+            }
             return View(manifests);
         }
 
