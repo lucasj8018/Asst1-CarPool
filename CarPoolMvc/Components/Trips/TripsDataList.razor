@@ -5,6 +5,8 @@
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
 
 <RadzenDataList AllowVirtualization="@allowVirtualization"
   Style="@(allowVirtualization ? "height:400px;overflow:auto;" : "")" WrapItems="@(!allowVirtualization)"
@@ -60,8 +62,16 @@
 
         <AuthorizeView Roles="Admin, Passenger">
           <RadzenStack Orientation="Orientation.Horizontal" Class="rz-p-4" Gap="10" JustifyContent="JustifyContent.End">
-            <RadzenButton Text="Register" Click="@(() => Register(@trips.TripId))"
-              Variant="Variant.Outlined" />
+			@if (IsUserAssociatedWithTrip(trips.TripId)) 
+			{
+				<RadzenButton Text="Unregister" Click="@(() => Unregister(@trips.TripId))"
+              		ButtonStyle="ButtonStyle.Success" Variant="Variant.Outlined" />
+			}
+			else 
+			{
+				<RadzenButton Text="Register" Click="@(() => Register(@trips.TripId))"
+              		Variant="Variant.Outlined" />
+			}
           </RadzenStack>
         </AuthorizeView>
 
@@ -95,5 +105,22 @@
   {
     NavigationManager.NavigateTo($"/Trips/Register/{tripId}");
   }
+
+  private void Unregister(int tripId)
+  {
+	NavigationManager.NavigateTo($"/Trips/Unregister/{tripId}");
+  }
+
+	private bool IsUserAssociatedWithTrip(int tripId)
+	{
+		var user = UserManager.GetUserAsync((ClaimsPrincipal)AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User).Result;
+		var email = user?.Email;
+		var member = dbContext.Members?.FirstOrDefault(m => m.Email == email);
+		var userId = member?.MemberId;
+
+		return dbContext.Trips!
+				.Include(t => t.Members)
+				.Any(t => t.TripId == tripId && t.Members!.Any(m => m.MemberId == userId));
+	}
 
 }

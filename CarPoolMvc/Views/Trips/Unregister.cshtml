@@ -1,0 +1,45 @@
+@model CarPoolLibrary.Models.Trip
+
+@{
+    ViewData["Title"] = "Withdraw from Trip";
+}
+
+<link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
+
+<h1>@ViewData["Title"]</h1>
+
+<h3>Confirm withdrawing from this trip?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Time)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Time)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Destination)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Destination)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MeetingAddress)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MeetingAddress)
+        </dd>
+    </dl>
+    
+    <form asp-action="Unregister">
+        <input type="hidden" asp-for="TripId" />
+        <component type="typeof(TripsButtonsUnregisterAndCancel)" render-mode="ServerPrerendered" />
+    </form>
+</div>
