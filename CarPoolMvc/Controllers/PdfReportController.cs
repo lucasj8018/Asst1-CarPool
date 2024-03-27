@@ -177,25 +177,31 @@ namespace CarPoolMvc.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                // Handle the case where the user is not found.
                 return new Manifest[0];
             }
 
-            // Assuming that Member has a UserId or UserName to link with IdentityUser
-            var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == user.Email);
-            if (member == null)
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            if (isAdmin)
             {
-                // Handle the case where the member is not found.
-                return new Manifest[0];
+                return await _context.Manifests!
+                    .Include(m => m.Member)
+                    .Include(m => m.Trip)
+                    .ToArrayAsync();
             }
+            else
+            {
+                var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == user.Email);
+                if (member == null)
+                {
+                    return new Manifest[0];
+                }
 
-            var manifests = await _context.Manifests!
-                .Include(m => m.Member)
-                .Include(m => m.Trip)
-                .Where(m => m.Member!.Email == user.Email)
-                .ToArrayAsync();
-
-            return manifests!;
+                return await _context.Manifests!
+                    .Include(m => m.Member)
+                    .Include(m => m.Trip)
+                    .Where(m => m.Member!.Email == user.Email)
+                    .ToArrayAsync();
+            }
         }
     }
 }
