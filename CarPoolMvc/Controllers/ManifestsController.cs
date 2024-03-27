@@ -36,19 +36,7 @@ namespace CarPoolMvc.Controllers
             {
                 return NotFound("User not found.");
             }
-            var email = user?.Email;
-            if (email == null)
-            {
-                return NotFound("User email not found.");
-            }
-            // Check if the user is a member, redirect to resgister if not
-            var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == email);
-            if (member == null)
-            {
-                // return NotFound("Member not found for the current user.");
-                return RedirectToAction("Create", "Members");
-            }
-            
+
             // Check role
             var isAdmin = await _userManager.IsInRoleAsync(user!, "Admin");
             var isOwner = await _userManager.IsInRoleAsync(user!, "Owner");
@@ -61,20 +49,30 @@ namespace CarPoolMvc.Controllers
                     .Include(m => m.Member)
                     .Include(m => m.Trip!.Members).ToListAsync();
             }
-            // show only the owner's trips
-            if (isOwner)
+            else
             {
-                manifests = await _context.Manifests!.Where(m => m.MemberId == member.MemberId)
-                    .Include(m => m.Trip!.Members).ToListAsync();
-            }
-            // show only manifests where the passenger is registered for
-            if (isPassenger)
-            {
-                manifests = await _context.Manifests!
-                .Include(m => m.Member)
-                .Include(m => m.Trip!.Members)
-                .Where(m => m.Trip!.Members!.Any(p => p.MemberId == member!.MemberId))
-                .ToListAsync();
+                // Check if the user is a member, redirect to resgister if not
+                var email = user?.Email;
+                var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == email);
+                if (member == null)
+                {
+                    return RedirectToAction("Create", "Members");
+                }
+                // show only the owner's trips
+                if (isOwner)
+                {
+                    manifests = await _context.Manifests!.Where(m => m.MemberId == member.MemberId)
+                        .Include(m => m.Trip!.Members).ToListAsync();
+                }
+                // show only manifests where the passenger is registered for
+                if (isPassenger)
+                {
+                    manifests = await _context.Manifests!
+                    .Include(m => m.Member)
+                    .Include(m => m.Trip!.Members)
+                    .Where(m => m.Trip!.Members!.Any(p => p.MemberId == member!.MemberId))
+                    .ToListAsync();
+                }
             }
             return View(manifests);
         }

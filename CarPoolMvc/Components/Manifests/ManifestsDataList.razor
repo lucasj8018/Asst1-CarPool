@@ -93,10 +93,7 @@
     var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
     var result = authState.User;
     var user = await UserManager.GetUserAsync(result);
-    var email = user?.Email; // Find member by email
-    var member = dbContext.Members?.FirstOrDefault(m => m.Email == email);
-
-    if (user != null && member != null)
+    if (user != null)
     {
       var isAdmin = await UserManager.IsInRoleAsync(user, "Admin");
       var isOwner = await UserManager.IsInRoleAsync(user, "Owner");
@@ -106,23 +103,29 @@
       if (isAdmin)
       {
         manifests = await dbContext.Manifests!
-          .Include(m => m.Member)
-          .Include(m => m.Trip!.Members).ToListAsync();
-      }
-      // Show only the owner's trips
-      if (member != null && isOwner)
-      {
-        manifests = await dbContext.Manifests!.Where(m => m.MemberId == member!.MemberId)
+        .Include(m => m.Member)
         .Include(m => m.Trip!.Members).ToListAsync();
       }
-      // show only manifests where the passenger is registered for
-      if (member != null && isPassenger)
+      else
       {
-        manifests = await dbContext.Manifests!
+        // Find member by email
+        var email = user?.Email;
+        var member = dbContext.Members?.FirstOrDefault(m => m.Email == email);
+        // Show only the owner's trips
+        if (isOwner)
+        {
+          manifests = await dbContext.Manifests!.Where(m => m.MemberId == member!.MemberId)
+          .Include(m => m.Trip!.Members).ToListAsync();
+        }
+        // show only manifests where the passenger is registered for
+        if (isPassenger)
+        {
+          manifests = await dbContext.Manifests!
           .Include(m => m.Member)
           .Include(m => m.Trip!.Members)
           .Where(m => m.Trip!.Members!.Any(p => p.MemberId == member!.MemberId))
           .ToListAsync();
+        }
       }
     }
   }
