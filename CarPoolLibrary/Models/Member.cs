@@ -17,7 +17,7 @@ public class Member
     public string? Email { get; set; }
 
     [Required]
-    [RegularExpression(@"^(\+[0-9]{1,3})?([0-9]{10})$", ErrorMessage = "Invalid mobile number")]
+    [RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Invalid mobile number")]
     public string? Mobile { get; set; }
 
     [Required]
@@ -27,7 +27,7 @@ public class Member
     public string? City { get; set; }
 
     [Required]
-    [RegularExpression(@"^[0-9]{5}$", ErrorMessage = "Invalid postal code")]
+    [RegularExpression(@"^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$", ErrorMessage = "Invalid postal code")]
     public string? PostalCode { get; set; }
 
     [Required]
