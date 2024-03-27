@@ -1,12 +1,16 @@
+using CarPoolLibrary.Data;
 using CarPoolLibrary.Models;
+using iText.IO.Font.Constants;
 using iText.IO.Image;
 using iText.Kernel.Colors;
+using iText.Kernel.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Draw;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,12 +19,14 @@ namespace CarPoolMvc.Controllers
     public class PdfReportController : Controller
     {
         private readonly ILogger<PdfReportController> _logger;
-        private readonly CarPoolLibrary.Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public PdfReportController(ILogger<PdfReportController> logger, CarPoolLibrary.Data.ApplicationDbContext context)
+        public PdfReportController(ILogger<PdfReportController> logger, ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _context = context;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -30,11 +36,11 @@ namespace CarPoolMvc.Controllers
 
             PdfWriter writer = new PdfWriter(ms);
             PdfDocument pdfDoc = new PdfDocument(writer);
-            Document document = new Document(pdfDoc, PageSize.A4, false);
+            Document document = new Document(pdfDoc, PageSize.A4.Rotate(), false);
             writer.SetCloseStream(false);
 
             ImageData imageData = ImageDataFactory.Create("wwwroot/images/logo.png");
-            Image logo = new Image(imageData).SetWidth(80).SetFixedPosition(36, PageSize.A4.GetTop() - 102);
+            Image logo = new Image(imageData).SetWidth(80).SetFixedPosition(36, PageSize.A4.Rotate().GetTop() - 103);
             document.Add(logo);
 
             Paragraph banner = new Paragraph("The Manifest Report")
@@ -46,7 +52,7 @@ namespace CarPoolMvc.Controllers
             document.Add(banner);
 
             Paragraph subheader = new Paragraph(DateTime.Now.ToShortDateString())
-              .SetTextAlignment(TextAlignment.CENTER)
+              .SetTextAlignment(TextAlignment.RIGHT)
               .SetFontSize(15);
             document.Add(subheader);
 
@@ -79,77 +85,88 @@ namespace CarPoolMvc.Controllers
 
         private async Task<Table> GetPdfTable()
         {
-            float[] columnWidths = { 1, 2, 3, 4, 5 };
+            PdfFont fontBold = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+            float cellHeight = 30;
+
+            float[] columnWidths = { 2, 4, 4, 4, 4 };
             Table table = new Table(UnitValue.CreatePercentArray(columnWidths)).UseAllAvailableWidth();
 
             // Headings
-            Cell cellManifestId = new Cell(1, 1)
+            Cell cellDriver = new Cell(1, 1)
+               .SetHeight(cellHeight)
                .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
                .SetTextAlignment(TextAlignment.CENTER)
-               .Add(new Paragraph("Manifest ID"));
-
-            Cell cellMemberId = new Cell(1, 1)
-               .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
-               .SetTextAlignment(TextAlignment.CENTER)
-               .Add(new Paragraph("Member\nID"));
+               .Add(new Paragraph("Driver").SetFont(fontBold));
 
             Cell cellDestination = new Cell(1, 1)
                .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
                .SetTextAlignment(TextAlignment.CENTER)
-               .Add(new Paragraph("Destination"));
+               .Add(new Paragraph("Dest.").SetFont(fontBold));
+
+            Cell cellMeetingAddress = new Cell(1, 1)
+               .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+               .SetTextAlignment(TextAlignment.CENTER)
+               .Add(new Paragraph("Meeting Address").SetFont(fontBold));
+
+            Cell cellDateTime = new Cell(1, 1)
+               .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+               .SetTextAlignment(TextAlignment.CENTER)
+               .Add(new Paragraph("Date & Time").SetFont(fontBold));
 
             Cell cellNotes = new Cell(1, 1)
                .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
                .SetTextAlignment(TextAlignment.CENTER)
-               .Add(new Paragraph("Notes"));
+               .Add(new Paragraph("Notes").SetFont(fontBold));
 
-            Cell cellEmail = new Cell(1, 1)
-               .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
-               .SetTextAlignment(TextAlignment.CENTER)
-               .Add(new Paragraph("Member Email"));
-
-            table.AddCell(cellManifestId);
-            table.AddCell(cellMemberId);
+            table.AddCell(cellDriver);
             table.AddCell(cellDestination);
+            table.AddCell(cellMeetingAddress);
+            table.AddCell(cellDateTime);
             table.AddCell(cellNotes);
-            table.AddCell(cellEmail);
 
-            cellManifestId.SetVerticalAlignment(VerticalAlignment.MIDDLE);
-            cellMemberId.SetVerticalAlignment(VerticalAlignment.MIDDLE);
+            cellDriver.SetVerticalAlignment(VerticalAlignment.MIDDLE);
             cellDestination.SetVerticalAlignment(VerticalAlignment.MIDDLE);
+            cellMeetingAddress.SetVerticalAlignment(VerticalAlignment.MIDDLE);
+            cellDateTime.SetVerticalAlignment(VerticalAlignment.MIDDLE);
             cellNotes.SetVerticalAlignment(VerticalAlignment.MIDDLE);
-            cellEmail.SetVerticalAlignment(VerticalAlignment.MIDDLE);
-
 
             Manifest[] manifests = await GetManifestsAsync();
 
             foreach (var item in manifests)
             {
-                Cell cManifestId = new Cell(1, 1)
-                    .SetTextAlignment(TextAlignment.CENTER)
-                    .Add(new Paragraph(item.ManifestId.ToString()));
+                var name = (item.Member?.FirstName ?? "") + " " + (item.Member?.LastName ?? "");
+                var dateandtime = (item.Trip?.Date != null && item.Trip?.Time != null) ? $"{item.Trip.Date} {item.Trip.Time}" : "N/A";
+                var destinationAddress = item.Trip?.Destination ?? "N/A";
+                var meetingAddress = item.Trip?.MeetingAddress ?? "N/A";
+                var notes = item.Notes ?? "N/A";
 
-                Cell cMemberId = new Cell(1, 1)
+                Cell cDriver = new Cell(1, 1)
                     .SetTextAlignment(TextAlignment.CENTER)
-                    .Add(new Paragraph(item.MemberId.ToString()));
-
-                Cell cDestinationAddress = new Cell(1, 1)
+                    .Add(new Paragraph(name));
+                Cell cDestination = new Cell(1, 1)
                     .SetTextAlignment(TextAlignment.CENTER)
-                    .Add(new Paragraph(item.DestinationAddress?.ToString() ?? "N/A"));
-
+                    .Add(new Paragraph(destinationAddress));
+                Cell cMeetingAddress = new Cell(1, 1)
+                    .SetTextAlignment(TextAlignment.CENTER)
+                    .Add(new Paragraph(meetingAddress));
+                Cell cDateTime = new Cell(1, 1)
+                    .SetTextAlignment(TextAlignment.CENTER)
+                    .Add(new Paragraph(dateandtime));
                 Cell cNotes = new Cell(1, 1)
                     .SetTextAlignment(TextAlignment.CENTER)
-                    .Add(new Paragraph(item.Notes?.ToString()));
+                    .Add(new Paragraph(notes));
 
-                Cell cEmail = new Cell(1, 1)
-                    .SetTextAlignment(TextAlignment.CENTER)
-                    .Add(new Paragraph(item.Member?.Email?.ToString() ?? "No Email"));
-
-                table.AddCell(cManifestId);
-                table.AddCell(cMemberId);
-                table.AddCell(cDestinationAddress);
+                table.AddCell(cDriver);
+                table.AddCell(cDestination);
+                table.AddCell(cMeetingAddress);
+                table.AddCell(cDateTime);
                 table.AddCell(cNotes);
-                table.AddCell(cEmail);
+
+                cDriver.SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                cDestination.SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                cMeetingAddress.SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                cDateTime.SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                cNotes.SetVerticalAlignment(VerticalAlignment.MIDDLE);
             }
 
             return table;
@@ -157,7 +174,27 @@ namespace CarPoolMvc.Controllers
 
         private async Task<Manifest[]> GetManifestsAsync()
         {
-            var manifests = await _context.Manifests!.Include(m => m.Member).ToArrayAsync();
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                // Handle the case where the user is not found.
+                return new Manifest[0];
+            }
+
+            // Assuming that Member has a UserId or UserName to link with IdentityUser
+            var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == user.Email);
+            if (member == null)
+            {
+                // Handle the case where the member is not found.
+                return new Manifest[0];
+            }
+
+            var manifests = await _context.Manifests!
+                .Include(m => m.Member)
+                .Include(m => m.Trip)
+                .Where(m => m.Member!.Email == user.Email)
+                .ToArrayAsync();
+
             return manifests!;
         }
     }
