@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group my-2">
                 <label asp-for="MemberId" class="control-label">Owner</label>
-                <select asp-for="MemberId" class ="form-control" asp-items="ViewBag.MemberId"></select>
+                <select asp-for="MemberId" class ="form-control" asp-items="@(ViewData["Owners"] as SelectList)"></select>
             </div>
             <div class="form-group my-2">
                 <label asp-for="Model" class="control-label"></label>
@@ -32,21 +32,15 @@
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
             <div class="form-group my-2">
-                <label asp-for="VehicleType" class="control-label">Vehicle Type</label>
-                <select asp-for="VehicleType" class="form-control">
+                <label asp-for="VehicleType" class="control-label"></label>
+                <select asp-for="VehicleType" asp-items="@(ViewData["DefaultVehicleTypes"] as SelectList)" 
+                    class="form-control" required >
                     <option value="">Select Vehicle Type</option>
-                    <option value="Sedan">Sedan</option>
-                    <option value="SUV">SUV</option>
-                    <option value="Truck">Truck</option>
-                    <option value="Hatchback">Hatchback</option>
-                    <option value="Minivan">Minivan</option>
-                    <option value="Compact">Compact</option>
-                    <option value="etc">etc</option>
                 </select>
                 <span asp-validation-for="VehicleType" class="text-danger"></span>
             </div>
             <div class="form-group my-2">
-                <label asp-for="NumberOfSeats" class="control-label">Number Of Seats</label>
+                <label asp-for="NumberOfSeats" class="control-label"></label>
                 <input asp-for="NumberOfSeats" class="form-control" />
                 <span asp-validation-for="NumberOfSeats" class="text-danger"></span>
             </div>

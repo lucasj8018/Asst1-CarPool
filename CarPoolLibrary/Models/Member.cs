@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarPoolLibrary.Models;
 public class Member
@@ -47,4 +48,7 @@ public class Member
 
     // Stores the trips that the member is registered for
     public List<Trip>? Trips { get; } = [];
+
+    [NotMapped]
+    public string FullName => $"{FirstName} {LastName}";
 }

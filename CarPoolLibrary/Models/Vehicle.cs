@@ -22,7 +22,7 @@ public class Vehicle
 
     [Required]
     [Display(Name = "Number of Seats")]
-    [Range(1, 7, ErrorMessage = "Please enter a valid number of seats")]
+    [Range(1, 8, ErrorMessage = "Please enter a valid number of seats between 1 and 8.")]
     public int? NumberOfSeats { get; set; }
 
     [Display(Name = "Vehicle Type")]

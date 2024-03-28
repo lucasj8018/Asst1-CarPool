@@ -14,6 +14,10 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="VehicleId" />
             <div class="form-group my-2">
+                <label asp-for="MemberId" class="control-label">Owner</label>
+                <select asp-for="MemberId" class ="form-control" asp-items="@(ViewData["Owners"] as SelectList)"></select>
+            </div>
+            <div class="form-group my-2">
                 <label asp-for="Model" class="control-label"></label>
                 <input asp-for="Model" class="form-control" />
                 <span asp-validation-for="Model" class="text-danger"></span>
@@ -28,22 +32,10 @@
                 <input asp-for="Year" class="form-control" />
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
-            @* <div class="form-group my-2">
-                <label asp-for="VehicleType" class="control-label">Vehicle Type</label>
-                <input asp-for="VehicleType" class="form-control" />
-                <span asp-validation-for="VehicleType" class="text-danger"></span>
-            </div> *@
             <div class="form-group my-2">
                 <label asp-for="VehicleType" class="control-label"></label>
-                <select asp-for="VehicleType" class="form-control">
+                <select asp-for="VehicleType" asp-items="@(ViewData["DefaultVehicleTypes"] as SelectList)" class="form-control" required>
                     <option value="">Select Vehicle Type</option>
-                    <option value="sedan">Sedan</option>
-                    <option value="SUV">SUV</option>
-                    <option value="truck">Truck</option>
-                    <option value="hatchback">Hatchback</option>
-                    <option value="hatchback">Minivan</option>
-                    <option value="hatchback">Compact</option>
-                    <option value="hatchback">etc</option>
                 </select>
                 <span asp-validation-for="VehicleType" class="text-danger"></span>
             </div>
