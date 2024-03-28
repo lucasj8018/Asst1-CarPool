@@ -88,7 +88,7 @@ namespace CarPoolMvc.Controllers
             PdfFont fontBold = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
             float cellHeight = 30;
 
-            float[] columnWidths = { 2, 4, 4, 4, 4 };
+            float[] columnWidths = { 2, 4, 4, 4, 3, 4 };
             Table table = new Table(UnitValue.CreatePercentArray(columnWidths)).UseAllAvailableWidth();
 
             // Headings
@@ -113,6 +113,11 @@ namespace CarPoolMvc.Controllers
                .SetTextAlignment(TextAlignment.CENTER)
                .Add(new Paragraph("Date & Time").SetFont(fontBold));
 
+            Cell cellPassengers = new Cell(1, 1)
+               .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+               .SetTextAlignment(TextAlignment.CENTER)
+               .Add(new Paragraph("Passengers").SetFont(fontBold));
+
             Cell cellNotes = new Cell(1, 1)
                .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
                .SetTextAlignment(TextAlignment.CENTER)
@@ -122,12 +127,14 @@ namespace CarPoolMvc.Controllers
             table.AddCell(cellDestination);
             table.AddCell(cellMeetingAddress);
             table.AddCell(cellDateTime);
+            table.AddCell(cellPassengers);
             table.AddCell(cellNotes);
 
             cellDriver.SetVerticalAlignment(VerticalAlignment.MIDDLE);
             cellDestination.SetVerticalAlignment(VerticalAlignment.MIDDLE);
             cellMeetingAddress.SetVerticalAlignment(VerticalAlignment.MIDDLE);
             cellDateTime.SetVerticalAlignment(VerticalAlignment.MIDDLE);
+            cellPassengers.SetVerticalAlignment(VerticalAlignment.MIDDLE);
             cellNotes.SetVerticalAlignment(VerticalAlignment.MIDDLE);
 
             Manifest[] manifests = await GetManifestsAsync();
@@ -138,6 +145,10 @@ namespace CarPoolMvc.Controllers
                 var dateandtime = (item.Trip?.Date != null && item.Trip?.Time != null) ? $"{item.Trip.Date} {item.Trip.Time}" : "N/A";
                 var destinationAddress = item.Trip?.Destination ?? "N/A";
                 var meetingAddress = item.Trip?.MeetingAddress ?? "N/A";
+                var passengers = item.Trip?.Members?
+                    .Select(m => $"{m.FirstName} {m.LastName}")
+                    .ToList() ?? new List<string>();
+                var passengersText = passengers.Any() ? string.Join("\n ", passengers) : "No passengers";
                 var notes = item.Notes ?? "N/A";
 
                 Cell cDriver = new Cell(1, 1)
@@ -152,6 +163,9 @@ namespace CarPoolMvc.Controllers
                 Cell cDateTime = new Cell(1, 1)
                     .SetTextAlignment(TextAlignment.CENTER)
                     .Add(new Paragraph(dateandtime));
+                Cell cPassengers = new Cell(1, 1)
+                    .SetTextAlignment(TextAlignment.CENTER)
+                    .Add(new Paragraph(passengersText));
                 Cell cNotes = new Cell(1, 1)
                     .SetTextAlignment(TextAlignment.CENTER)
                     .Add(new Paragraph(notes));
@@ -160,12 +174,14 @@ namespace CarPoolMvc.Controllers
                 table.AddCell(cDestination);
                 table.AddCell(cMeetingAddress);
                 table.AddCell(cDateTime);
+                table.AddCell(cPassengers);
                 table.AddCell(cNotes);
 
                 cDriver.SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 cDestination.SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 cMeetingAddress.SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 cDateTime.SetVerticalAlignment(VerticalAlignment.MIDDLE);
+                cPassengers.SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 cNotes.SetVerticalAlignment(VerticalAlignment.MIDDLE);
             }
 
@@ -186,20 +202,23 @@ namespace CarPoolMvc.Controllers
                 return await _context.Manifests!
                     .Include(m => m.Member)
                     .Include(m => m.Trip)
+                    .ThenInclude(t => t!.Members)
                     .ToArrayAsync();
             }
             else
             {
-                var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == user.Email);
-                if (member == null)
-                {
-                    return new Manifest[0];
-                }
+                var userEmail = user.Email;
+                var tripsAsPassenger = _context.Trips?
+                    .Include(t => t.Members)
+                    .Where(t => t.Members!.Any(m => m.Email == userEmail))
+                    .Select(t => t.TripId)
+                    .ToList();
 
                 return await _context.Manifests!
                     .Include(m => m.Member)
                     .Include(m => m.Trip)
-                    .Where(m => m.Member!.Email == user.Email)
+                    .ThenInclude(t => t!.Members)
+                    .Where(m => m.Member!.Email == userEmail || tripsAsPassenger!.Contains(m.Trip!.TripId))
                     .ToArrayAsync();
             }
         }
