@@ -6,12 +6,15 @@ namespace CarPoolLibrary.Models;
 public class Manifest
 {
     [Key]
+    [Display(Name = "Manifest Id")]
     public int ManifestId { get; set; }
 
     [Required]
+    [Display(Name = "Member Id")]
     public int MemberId { get; set; }
 
     [Required]
+    [Display(Name = "Trip Id")]
     public int TripId { get; set; }
 
     public string? Notes { get; set; }

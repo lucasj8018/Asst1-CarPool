@@ -7,9 +7,11 @@ public class Trip
 {
     [Key]
     [Required]
+    [Display(Name = "Trip Id")]
     public int TripId { get; set; }
 
     [Required]
+    [Display(Name = "Vehicle Id")]
     public int VehicleId { get; set; }
 
     [Required]
