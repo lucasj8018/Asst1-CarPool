@@ -8,6 +8,12 @@
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<IdentityUser> UserManager
 
+@if (trips == null || !trips.Any())
+{
+    <p>No trips available.</p>
+}
+else
+{
 <RadzenDataList AllowVirtualization="@allowVirtualization"
   Style="@(allowVirtualization ? "height:400px;overflow:auto;" : "")" WrapItems="@(!allowVirtualization)"
   AllowPaging="@(!allowVirtualization)" Data="@trips" TItem="CarPoolLibrary.Models.Trip" PageSize="5"
@@ -108,6 +114,7 @@
     </RadzenCard>
   </Template>
 </RadzenDataList>
+}
 
 
 @code {
