@@ -31,9 +31,9 @@ public class Vehicle
 
     public DateTime? Modified { get; set; } = DateTime.Now;
 
-    public string? CreatedBy { get; set; } = "System";
+    public string CreatedBy { get; set; } = "System";
 
-    public string? ModifiedBy { get; set; } = "System";
+    public string ModifiedBy { get; set; } = "System";
 
     [ForeignKey("MemberId")]
     public Member? Member { get; set; }
