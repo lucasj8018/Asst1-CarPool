@@ -74,6 +74,10 @@ namespace CarPoolMvc.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Add create by, modified by info
+                var user = await _userManager.GetUserAsync(User);
+                member.CreatedBy = user!.Id;
+                member.ModifiedBy = user!.Id;
                 _context.Add(member);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
@@ -115,6 +119,10 @@ namespace CarPoolMvc.Controllers
             {
                 try
                 {
+                    // Add modified by info
+                    var user = await _userManager.GetUserAsync(User);
+                    member.ModifiedBy = user!.Id;
+                    member.Modified = DateTime.Now;
                     _context.Update(member);
                     await _context.SaveChangesAsync();
                 }

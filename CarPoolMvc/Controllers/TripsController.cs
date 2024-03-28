@@ -90,6 +90,10 @@ namespace CarPoolMvc.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Add create by, modified by info
+                var user = await _userManager.GetUserAsync(User);
+                trip.CreatedBy = user!.Id;
+                trip.ModifiedBy = user!.Id;
                 _context.Add(trip);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -138,6 +142,10 @@ namespace CarPoolMvc.Controllers
             {
                 try
                 {
+                    // Add modified by info
+                    var user = await _userManager.GetUserAsync(User);
+                    trip.ModifiedBy = user!.Id;
+                    trip.Modified = DateTime.Now;
                     _context.Update(trip);
                     await _context.SaveChangesAsync();
                 }
@@ -242,6 +250,9 @@ namespace CarPoolMvc.Controllers
             // Only Passenger members can register for trips
             if (member != null && currentTrip != null)
             {
+                // Add modified by info
+                currentTrip.ModifiedBy = user!.Id;
+                currentTrip.Modified = DateTime.Now;
                 member.Trips!.Add(currentTrip);
                 await _context.SaveChangesAsync();
             }
@@ -290,6 +301,9 @@ namespace CarPoolMvc.Controllers
             // Only Passenger members can unregister from trips
             if (member != null && currentTrip != null)
             {
+                // Add modified by info
+                currentTrip.ModifiedBy = user!.Id;
+                currentTrip.Modified = DateTime.Now;
                 member.Trips!.Remove(currentTrip);
                 await _context.SaveChangesAsync();
             }
