@@ -40,6 +40,6 @@ public class Trip
     public Vehicle? Vehicle { get; set; }
 
     // Stores the passengers of the trips the member is a driver for
-    public List<Member>? Members { get; set; } = [];
+    public List<Member> Members { get; set; } = [];
 
 }
