@@ -54,11 +54,29 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Trips/Create
+        // Admin can create a trip for any vehicle
+        // Owner can only create a trip for their own vehicles
         [Authorize(Roles = "Admin, Owner")]
         [HttpGet("Create")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles?.Include(v => v.Member), "VehicleId", "FullName");
+            // check if the logged-in user is an Admin
+            var user = await _userManager.GetUserAsync(User);
+            var isAdmin = await _userManager.IsInRoleAsync(user!, "Admin");
+            if (isAdmin) 
+            {
+                // Return a list of all vehicles to the View by the vehicle ID, 
+                // but display the name of the vehicle full name instead of the vehicle ID
+                ViewData["VehicleId"] = new SelectList(_context.Vehicles?.Include(v => v.Member), "VehicleId", "FullName");
+            }
+            else
+            {
+                var currentMember = await _context.Members!.FirstOrDefaultAsync(m => m.Email == user!.Email);
+                // Return a list of vehicles owned by the logged-in user
+                ViewData["VehicleId"] = new SelectList(_context.Vehicles?
+                    .Include(v => v.Member)
+                    .Where(v => v.MemberId == currentMember!.MemberId), "VehicleId", "FullName");
+            }
             return View();
         }
 
@@ -76,7 +94,6 @@ namespace CarPoolMvc.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Make", trip.VehicleId);
             return View(trip);
         }
 
@@ -98,8 +115,9 @@ namespace CarPoolMvc.Controllers
             {
                 return NotFound();
             }
-
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Model", trip.VehicleId);
+            // Return a list of all vehicles to the View by the vehicle ID, 
+            // but display the name of the vehicle full name instead of the vehicle ID
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles?.Include(v => v.Member), "VehicleId", "FullName", trip.VehicleId);
             return View(trip);
         }
 
