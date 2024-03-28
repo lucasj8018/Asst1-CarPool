@@ -1,16 +1,14 @@
 @model CarPoolLibrary.Models.Trip
 
 @{
-    ViewData["Title"] = "Register for Trip";
+    ViewData["Title"] = "Register for Trip?";
 }
 
 <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
 
 <h1>@ViewData["Title"]</h1>
 
-<h3>Confirm registration as a passenger on this trip?</h3>
-<div>
-    <hr />
+<div class="my-4">
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Date)
