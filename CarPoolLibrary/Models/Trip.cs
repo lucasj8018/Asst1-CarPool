@@ -22,7 +22,7 @@ public class Trip
 
     [Required]
     [StringLength(50)]
-    [Display(Name = "Destination Adress")]
+    [Display(Name = "Destination Address")]
     public string? Destination { get; set; }
 
     [Required]

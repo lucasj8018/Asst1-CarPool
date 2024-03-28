@@ -41,4 +41,7 @@ public class Vehicle
 
     [ForeignKey("MemberId")]
     public Member? Member { get; set; }
+
+    [NotMapped]
+    public string? FullName => $"{Make} {Model}, {Member?.FullName}";
 }

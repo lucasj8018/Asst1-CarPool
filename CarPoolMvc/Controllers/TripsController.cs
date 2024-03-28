@@ -58,7 +58,7 @@ namespace CarPoolMvc.Controllers
         [HttpGet("Create")]
         public IActionResult Create()
         {
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Model");
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles?.Include(v => v.Member), "VehicleId", "FullName");
             return View();
         }
 
@@ -76,7 +76,7 @@ namespace CarPoolMvc.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Model", trip.VehicleId);
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Make", trip.VehicleId);
             return View(trip);
         }
 
