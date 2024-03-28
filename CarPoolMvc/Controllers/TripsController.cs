@@ -29,7 +29,7 @@ namespace CarPoolMvc.Controllers
         // GET: Trips
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Trips!.Include(t => t.Vehicle);
+            var applicationDbContext = _context.Trips!.Include(t => t.Vehicle!.Member).Include(t => t.Members);
             return View(await applicationDbContext.ToListAsync());
         }
 
