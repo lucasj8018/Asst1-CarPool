@@ -7,6 +7,7 @@ public class Vehicle
 {
     [Key]
     [Required]
+    [Display(Name = "Vehicle Id")]
     public int VehicleId { get; set; }
 
     [Required]
@@ -20,12 +21,15 @@ public class Vehicle
     public int? Year { get; set; }
 
     [Required]
-    [Range(1, 7, ErrorMessage = "Please enter a valid number of seats")]
+    [Display(Name = "Number of Seats")]
+    [Range(1, 8, ErrorMessage = "Please enter a valid number of seats between 1 and 8.")]
     public int? NumberOfSeats { get; set; }
 
+    [Display(Name = "Vehicle Type")]
     public string? VehicleType { get; set; }
 
-    public int? MemberId { get; set; }
+    [Display(Name = "Member Id")]
+    public int? MemberId { get; set; } // Driver
 
     public DateTime? Created { get; set; } = DateTime.Now;
 
@@ -37,4 +41,7 @@ public class Vehicle
 
     [ForeignKey("MemberId")]
     public Member? Member { get; set; }
+
+    [NotMapped]
+    public string? FullName => $"{Make} {Model}, {Member?.FullName}";
 }

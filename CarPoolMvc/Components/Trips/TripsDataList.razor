@@ -8,6 +8,12 @@
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<IdentityUser> UserManager
 
+@if (trips == null || !trips.Any())
+{
+    <p>No trips available.</p>
+}
+else
+{
 <RadzenDataList AllowVirtualization="@allowVirtualization"
   Style="@(allowVirtualization ? "height:400px;overflow:auto;" : "")" WrapItems="@(!allowVirtualization)"
   AllowPaging="@(!allowVirtualization)" Data="@trips" TItem="CarPoolLibrary.Models.Trip" PageSize="5"
@@ -34,7 +40,7 @@
 
         @* Display the destination and meeting address *@
         <RadzenColumn Size="3" Class="rz-p-4">
-          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Destination</RadzenText>
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Destination Address</RadzenText>
           <RadzenText TextStyle="TextStyle.Body2">@trips.Destination</RadzenText>
 
           <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mt-2">Meeting Address
@@ -108,6 +114,7 @@
     </RadzenCard>
   </Template>
 </RadzenDataList>
+}
 
 
 @code {

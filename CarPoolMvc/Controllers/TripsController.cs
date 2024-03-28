@@ -54,11 +54,29 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Trips/Create
+        // Admin can create a trip for any vehicle
+        // Owner can only create a trip for their own vehicles
         [Authorize(Roles = "Admin, Owner")]
         [HttpGet("Create")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Model");
+            // check if the logged-in user is an Admin
+            var user = await _userManager.GetUserAsync(User);
+            var isAdmin = await _userManager.IsInRoleAsync(user!, "Admin");
+            if (isAdmin) 
+            {
+                // Return a list of all vehicles to the View by the vehicle ID, 
+                // but display the name of the vehicle full name instead of the vehicle ID
+                ViewData["VehicleId"] = new SelectList(_context.Vehicles?.Include(v => v.Member), "VehicleId", "FullName");
+            }
+            else
+            {
+                var currentMember = await _context.Members!.FirstOrDefaultAsync(m => m.Email == user!.Email);
+                // Return a list of vehicles owned by the logged-in user
+                ViewData["VehicleId"] = new SelectList(_context.Vehicles?
+                    .Include(v => v.Member)
+                    .Where(v => v.MemberId == currentMember!.MemberId), "VehicleId", "FullName");
+            }
             return View();
         }
 
@@ -72,11 +90,14 @@ namespace CarPoolMvc.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Add create by, modified by info
+                var user = await _userManager.GetUserAsync(User);
+                trip.CreatedBy = user!.Id;
+                trip.ModifiedBy = user!.Id;
                 _context.Add(trip);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Model", trip.VehicleId);
             return View(trip);
         }
 
@@ -98,8 +119,9 @@ namespace CarPoolMvc.Controllers
             {
                 return NotFound();
             }
-
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Model", trip.VehicleId);
+            // Return a list of all vehicles to the View by the vehicle ID, 
+            // but display the name of the vehicle full name instead of the vehicle ID
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles?.Include(v => v.Member), "VehicleId", "FullName", trip.VehicleId);
             return View(trip);
         }
 
@@ -120,6 +142,10 @@ namespace CarPoolMvc.Controllers
             {
                 try
                 {
+                    // Add modified by info
+                    var user = await _userManager.GetUserAsync(User);
+                    trip.ModifiedBy = user!.Id;
+                    trip.Modified = DateTime.Now;
                     _context.Update(trip);
                     await _context.SaveChangesAsync();
                 }
@@ -224,6 +250,9 @@ namespace CarPoolMvc.Controllers
             // Only Passenger members can register for trips
             if (member != null && currentTrip != null)
             {
+                // Add modified by info
+                currentTrip.ModifiedBy = user!.Id;
+                currentTrip.Modified = DateTime.Now;
                 member.Trips!.Add(currentTrip);
                 await _context.SaveChangesAsync();
             }
@@ -272,6 +301,9 @@ namespace CarPoolMvc.Controllers
             // Only Passenger members can unregister from trips
             if (member != null && currentTrip != null)
             {
+                // Add modified by info
+                currentTrip.ModifiedBy = user!.Id;
+                currentTrip.Modified = DateTime.Now;
                 member.Trips!.Remove(currentTrip);
                 await _context.SaveChangesAsync();
             }

@@ -8,22 +8,21 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ManifestId" />
             <input type="hidden" asp-for="MemberId" />
-            <div class="form-group">
+            <div class="form-group my-2">
                 <label asp-for="MemberId" class="control-label">Member ID</label>
                 <select asp-for="MemberId" class ="form-control" asp-items="ViewBag.MemberId"></select>
             </div>
-            <div class="form-group">
+            <div class="form-group my-2">
                 <label asp-for="TripId" class="control-label"></label>
                 <select asp-for="TripId" class ="form-control" asp-items="ViewBag.TripId"></select>
             </div>
-            <div class="form-group">
+            <div class="form-group my-2">
                 <label asp-for="Notes" class="control-label"></label>
                 <input asp-for="Notes" class="form-control" />
                 <span asp-validation-for="Notes" class="text-danger"></span>
