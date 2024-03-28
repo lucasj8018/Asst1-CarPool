@@ -229,6 +229,39 @@ public static class SeedData
                 Email="pete@smith.com",
                 Mobile="604-333-6666",
                 Street="231 Reiver Road",
+                City="Delta",
+                PostalCode="V6G 1M6",
+                Country="Canada",
+            },
+            new Member() {    // 5
+                MemberId=5,
+                FirstName="Admin",
+                LastName="Admin",
+                Email="a@a.a",
+                Mobile="604-333-6666",
+                Street="231 Reiver Road",
+                City="Surrey",
+                PostalCode="V6G 1M6",
+                Country="Canada",
+            },
+            new Member() {    // 6
+                MemberId=6,
+                FirstName="Owner",
+                LastName="Owner",
+                Email="o@o.o",
+                Mobile="604-333-6666",
+                Street="231 Reiver Road",
+                City="Surrey",
+                PostalCode="V6G 1M6",
+                Country="Canada",
+            },
+            new Member() {    // 7
+                MemberId=7,
+                FirstName="Passenger",
+                LastName="Passenger",
+                Email="p@p.p",
+                Mobile="604-333-6666",
+                Street="231 Reiver Road",
                 City="Surrey",
                 PostalCode="V6G 1M6",
                 Country="Canada",
@@ -267,6 +300,15 @@ public static class SeedData
                 NumberOfSeats = 8,
                 VehicleType = "Minivan",
                 MemberId = 3
+            },
+            new Vehicle {
+                VehicleId = 4,
+                Model = "Corolla",
+                Make = "Toyota",
+                Year = 2019,
+                NumberOfSeats = 5,
+                VehicleType = "Sedan",
+                MemberId = 6, // o@o.o
             }
         };
 
@@ -299,6 +341,14 @@ public static class SeedData
                 Time = TimeOnly.Parse("15:00"),
                 Destination = "12345 Lougheed Highway, Coquitlam",
                 MeetingAddress = "540 Oliver Road, Richmond"
+            },
+            new Trip {
+                TripId = 4,
+                VehicleId = 4,
+                Date = DateOnly.Parse("2024-02-05"),
+                Time = TimeOnly.Parse("15:00"),
+                Destination = "12345 Lougheed Highway, Coquitlam",
+                MeetingAddress = "540 Oliver Road, Richmond"
             }
         };
 
@@ -324,6 +374,12 @@ public static class SeedData
                 ManifestId = 3,
                 MemberId = 3,
                 TripId = 3,
+                Notes = "I will be driving to work"
+            },
+            new Manifest {
+                ManifestId = 4,
+                MemberId = 6,
+                TripId = 4,
                 Notes = "I will be driving to work"
             }
         };
