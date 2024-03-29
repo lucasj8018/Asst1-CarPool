@@ -10,6 +10,7 @@ using CarPoolLibrary.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Security.Claims;
 
 namespace CarPoolMvc.Controllers
 {
@@ -29,6 +30,17 @@ namespace CarPoolMvc.Controllers
         // GET: Trips
         public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(User);
+            var email = user?.Email;
+            if (email == null)
+            {
+                return NotFound("User email not found.");
+            }
+            var member = await _context.Members!.Include(m => m.Trips).FirstOrDefaultAsync(m => m.Email == email);
+            if (member == null)
+            {
+                return RedirectToAction("Create", "Members");
+            }
             var applicationDbContext = _context.Trips!.Include(t => t.Vehicle);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -72,6 +84,25 @@ namespace CarPoolMvc.Controllers
         {
             if (ModelState.IsValid)
             {
+                trip.Created = DateTime.Now;
+                trip.Modified = DateTime.Now;
+
+                var user = await _userManager.GetUserAsync(User);
+                var email = user?.Email;
+                var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == email);
+                if (member == null)
+                {
+                    return RedirectToAction("Create", "Members");
+                }
+                else
+                {
+                    var firstName = member.FirstName;
+                    var lastName = member.LastName;
+
+                    trip.CreatedBy = $"{firstName} {lastName}";
+                    trip.ModifiedBy = $"{firstName} {lastName}";
+                }
+
                 _context.Add(trip);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -120,8 +151,23 @@ namespace CarPoolMvc.Controllers
             {
                 try
                 {
-                    _context.Update(trip);
-                    await _context.SaveChangesAsync();
+                    var user = await _userManager.GetUserAsync(User);
+                    var email = user?.Email;
+                    var member = await _context.Members!.FirstOrDefaultAsync(m => m.Email == email);
+                    if (member == null)
+                    {
+                        return RedirectToAction("Create", "Members");
+                    }
+                    else
+                    {
+                        var firstName = member.FirstName;
+                        var lastName = member.LastName;
+
+                        trip.ModifiedBy = $"{firstName} {lastName}";
+                        trip.Modified = DateTime.Now;
+                        _context.Update(trip);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -191,7 +237,7 @@ namespace CarPoolMvc.Controllers
             var trip = await _context.Trips!
                 .Include(t => t.Vehicle)
                 .FirstOrDefaultAsync(m => m.TripId == tripId);
-                
+
             if (tripId == null || trip == null)
             {
                 return NotFound();
@@ -219,7 +265,7 @@ namespace CarPoolMvc.Controllers
             {
                 return RedirectToAction("Create", "Members");
             }
-            
+
             var currentTrip = await _context.Trips!.Include(t => t.Members).FirstOrDefaultAsync(t => t.TripId == tripId);
             // Only Passenger members can register for trips
             if (member != null && currentTrip != null)
@@ -240,7 +286,7 @@ namespace CarPoolMvc.Controllers
             var trip = await _context.Trips!
                 .Include(t => t.Vehicle)
                 .FirstOrDefaultAsync(m => m.TripId == tripId);
-                
+
             if (tripId == null || trip == null)
             {
                 return NotFound();
@@ -267,7 +313,7 @@ namespace CarPoolMvc.Controllers
             {
                 return RedirectToAction("Create", "Members");
             }
-            
+
             var currentTrip = await _context.Trips!.Include(t => t.Members).FirstOrDefaultAsync(t => t.TripId == tripId);
             // Only Passenger members can unregister from trips
             if (member != null && currentTrip != null)

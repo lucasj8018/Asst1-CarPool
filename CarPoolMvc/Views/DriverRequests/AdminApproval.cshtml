@@ -1,0 +1,43 @@
+@model IEnumerable<CarPoolLibrary.Models.Member>
+
+@{
+    ViewData["Title"] = "Driver Requests";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (!Model.Any())
+{
+    <h2>No requests found.</h2>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Request User Name</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var member in Model)
+            {
+                <tr>
+                    <td>@member.FirstName @member.LastName</td>
+                    <td>
+                        <div style="display: flex;">
+                            <form asp-action="ApproveRequestDriverRole" asp-controller="DriverRequests" style="margin-right: 10px;">
+                                <input type="hidden" name="memberId" value="@member.MemberId" />
+                                <input type="submit" value="Approve" class="btn btn-success" />
+                            </form>
+                            <form asp-action="DeclineRequestDriverRole" asp-controller="DriverRequests">
+                                <input type="hidden" name="memberId" value="@member.MemberId" />
+                                <input type="submit" value="Decline" class="btn btn-danger" />
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
