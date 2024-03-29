@@ -10,6 +10,7 @@ using CarPoolLibrary.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Security.Claims;
 
 namespace CarPoolMvc.Controllers
 {
@@ -217,7 +218,7 @@ namespace CarPoolMvc.Controllers
             var trip = await _context.Trips!
                 .Include(t => t.Vehicle)
                 .FirstOrDefaultAsync(m => m.TripId == tripId);
-                
+
             if (tripId == null || trip == null)
             {
                 return NotFound();
@@ -245,7 +246,7 @@ namespace CarPoolMvc.Controllers
             {
                 return RedirectToAction("Create", "Members");
             }
-            
+
             var currentTrip = await _context.Trips!.Include(t => t.Members).FirstOrDefaultAsync(t => t.TripId == tripId);
             // Only Passenger members can register for trips
             if (member != null && currentTrip != null)
@@ -269,7 +270,7 @@ namespace CarPoolMvc.Controllers
             var trip = await _context.Trips!
                 .Include(t => t.Vehicle)
                 .FirstOrDefaultAsync(m => m.TripId == tripId);
-                
+
             if (tripId == null || trip == null)
             {
                 return NotFound();
@@ -296,7 +297,7 @@ namespace CarPoolMvc.Controllers
             {
                 return RedirectToAction("Create", "Members");
             }
-            
+
             var currentTrip = await _context.Trips!.Include(t => t.Members).FirstOrDefaultAsync(t => t.TripId == tripId);
             // Only Passenger members can unregister from trips
             if (member != null && currentTrip != null)

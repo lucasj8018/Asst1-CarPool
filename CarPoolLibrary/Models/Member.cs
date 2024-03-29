@@ -21,7 +21,7 @@ public class Member
     public string? Email { get; set; }
 
     [Required]
-    [RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Invalid mobile number")]
+    [RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Invalid mobile number format. Use 123-456-7890.")]
     public string? Mobile { get; set; }
 
     [Required]
@@ -31,8 +31,7 @@ public class Member
     public string? City { get; set; }
 
     [Required]
-    [Display(Name = "Postal Code")]
-    [RegularExpression(@"^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$", ErrorMessage = "Invalid postal code")]
+    [RegularExpression(@"^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$", ErrorMessage = "Invalid postal code format. Use A1A 1A1.")]
     public string? PostalCode { get; set; }
 
     [Required]
@@ -42,9 +41,11 @@ public class Member
 
     public DateTime? Modified { get; set; } = DateTime.Now;
 
-    public string? CreatedBy { get; set; } = "System";
+    public string? CreatedBy { get; set; }
 
-    public string? ModifiedBy { get; set; } = "System";
+    public string? ModifiedBy { get; set; }
+
+    public bool DriverRequest { get; set; } = false;
 
     // Stores the trips that the member is registered for
     public List<Trip>? Trips { get; } = [];

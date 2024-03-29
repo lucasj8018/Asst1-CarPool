@@ -19,8 +19,8 @@ namespace CarPoolMvc.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<RolesController> _logger;
 
-        public MembersController(ApplicationDbContext context, 
-            UserManager<IdentityUser> userManager, 
+        public MembersController(ApplicationDbContext context,
+            UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             ILogger<RolesController> logger)
         {
@@ -31,14 +31,14 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Members
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Members!.ToListAsync());
         }
 
         // GET: Members/Details/5
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -57,10 +57,10 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Members/Create
-        [Authorize(Roles="Admin, Passenger")]
+        [Authorize(Roles = "Admin, Passenger")]
         public IActionResult Create()
         {
-            
+
             return View();
         }
 
@@ -69,7 +69,7 @@ namespace CarPoolMvc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles="Admin, Passenger")]
+        [Authorize(Roles = "Admin, Passenger")]
         public async Task<IActionResult> Create([Bind("MemberId,FirstName,LastName,Email,Mobile,Street,City,PostalCode,Country,Created,Modified,CreatedBy,ModifiedBy")] Member member)
         {
             if (ModelState.IsValid)
@@ -86,7 +86,7 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Members/Edit/5
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -107,7 +107,7 @@ namespace CarPoolMvc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("MemberId,FirstName,LastName,Email,Mobile,Street,City,PostalCode,Country,Created,Modified,CreatedBy,ModifiedBy")] Member member)
         {
             if (id != member.MemberId)
@@ -163,7 +163,7 @@ namespace CarPoolMvc.Controllers
         // POST: Members/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var member = await _context.Members!.FindAsync(id);

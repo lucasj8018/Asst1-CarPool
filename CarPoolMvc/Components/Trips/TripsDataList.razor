@@ -27,6 +27,9 @@ else
           <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Text">
             ID # @trips.TripId.ToString()
           </RadzenBadge>
+
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mt-2">Driver</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@trips.CreatedBy</RadzenText>
         </RadzenColumn>
 
         @* Display the date and time *@

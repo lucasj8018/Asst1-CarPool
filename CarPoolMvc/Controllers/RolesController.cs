@@ -16,8 +16,8 @@ public class RolesController : Controller
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly ILogger<RolesController> _logger;
 
-    public RolesController(ApplicationDbContext context, 
-            UserManager<IdentityUser> userManager, 
+    public RolesController(ApplicationDbContext context,
+            UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             ILogger<RolesController> logger)
     {
