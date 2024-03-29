@@ -16,12 +16,14 @@ namespace CarPoolMvc.Controllers
     public class VehiclesController : Controller
     {
         private readonly ApplicationDbContext _context;
+
         private readonly UserManager<IdentityUser> _userManager;
 
         public VehiclesController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
+
         }
 
         // GET: Vehicles
@@ -105,7 +107,7 @@ namespace CarPoolMvc.Controllers
             else
             {
                 // If the logged-in user is not an Admin, show only the logged-in users member
-                ViewData["Owners"] = new SelectList(new List<Member>{loggedInMember!}, "MemberId", "FullName", loggedInMember?.MemberId);
+                ViewData["Owners"] = new SelectList(new List<Member> { loggedInMember! }, "MemberId", "FullName", loggedInMember?.MemberId);
             }
             // Pass the list of defined vehicle types to the view
             ViewData["DefaultVehicleTypes"] = new SelectList(DefaultVehicleTypes());
@@ -149,7 +151,7 @@ namespace CarPoolMvc.Controllers
             // check if the logged-in user is an Admin
             var user = await _userManager.GetUserAsync(User);
             var isAdmin = await _userManager.IsInRoleAsync(user!, "Admin");
-            if (isAdmin) 
+            if (isAdmin)
             {
                 // show all Owners
                 var owners = await _userManager.GetUsersInRoleAsync("Owner");
@@ -165,7 +167,7 @@ namespace CarPoolMvc.Controllers
             {
                 // Return vehicle owner to the View, but display the owners' full name instead of the member ID
                 // Default selected value is the vehicle owner's member ID
-                ViewData["Owners"] = new SelectList(new List<Member>{vehicle.Member!}, "MemberId", "FullName", vehicle.MemberId);
+                ViewData["Owners"] = new SelectList(new List<Member> { vehicle.Member! }, "MemberId", "FullName", vehicle.MemberId);
             }
             ViewData["DefaultVehicleTypes"] = new SelectList(DefaultVehicleTypes());
             return View(vehicle);
