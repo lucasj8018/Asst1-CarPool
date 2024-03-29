@@ -1,0 +1,82 @@
+@rendermode InteractiveServer
+@inject CarPoolLibrary.Data.ApplicationDbContext dbContext
+@inject NavigationManager NavigationManager
+
+@if (members == null || !members.Any())
+{
+    <p>No members available.</p>
+}
+else
+{
+<RadzenDataList AllowVirtualization="@allowVirtualization"
+  Style="@(allowVirtualization ? "height:400px;overflow:auto;" : "")" WrapItems="@(!allowVirtualization)"
+  AllowPaging="@(!allowVirtualization)" Data="@members" TItem="CarPoolLibrary.Models.Member" PageSize="5"
+  PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+  <Template Context="members">
+    <RadzenCard Style="width: 100%; padding: 0;">
+      <RadzenRow Gap="0" AlignItems="AlignItems.Start"  JustifyContent="JustifyContent.SpaceBetween">
+
+        @* Display the member ID *@
+        <RadzenColumn Size="1" Class="rz-p-4">
+          @* <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">ID</RadzenText> *@
+          @* <RadzenText TextStyle="TextStyle.Body2">@(members.MemberId)</RadzenText> *@
+          <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Text" >
+              ID # @(members.MemberId.ToString())
+          </RadzenBadge>
+        </RadzenColumn>
+
+        @* Display the full name *@
+        <RadzenColumn Size="2" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Name</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@members.FirstName @members.LastName</RadzenText>
+        </RadzenColumn>
+
+        @* Display the email *@
+        <RadzenColumn Size="3" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Contact Info</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@(members.Email)</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@(members.Mobile)</RadzenText>
+        </RadzenColumn>
+
+        @* Display the Address *@
+        <RadzenColumn Size="3" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Address</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@(members.Street)</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@(members.City), @(members.PostalCode), @(members.Country)</RadzenText>
+        </RadzenColumn>
+
+        @* Edit or Delete a Member *@
+        <RadzenStack Orientation="Orientation.Horizontal" Class="rz-p-4" Gap="10" JustifyContent="JustifyContent.End">
+          <RadzenButton Text="Edit" Click="@(() => Edit(@members.MemberId.ToString()))" Variant="Variant.Outlined"
+            />
+          <RadzenButton Text="Delete" Click="@(() => Delete(@members.MemberId.ToString()))" Variant="Variant.Outlined"
+            ButtonStyle="ButtonStyle.Danger" />
+        </RadzenStack>
+
+      </RadzenRow>
+    </RadzenCard>
+  </Template>
+</RadzenDataList>
+}
+
+@code {
+  bool allowVirtualization = false; // a RadzenDataList property
+  IEnumerable<CarPoolLibrary.Models.Member> members = new List<CarPoolLibrary.Models.Member>();
+  
+  protected override async Task OnInitializedAsync()
+  {
+    await base.OnInitializedAsync();
+    members = dbContext.Members!.OrderBy(mem => mem.FirstName).ToList();
+  }
+
+  private void Edit(string id)
+  {
+    NavigationManager.NavigateTo($"/Members/Edit/{id}");
+  }
+
+  private void Delete(string id)
+  {
+    NavigationManager.NavigateTo($"/Members/Delete/{id}");
+  }
+
+}

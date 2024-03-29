@@ -1,15 +1,14 @@
 @model CarPoolLibrary.Models.Trip
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Trip?";
 }
 
-<h1>Delete</h1>
+<link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Trip</h4>
-    <hr />
+<h1>@ViewData["Title"]</h1>
+
+<div class="my-4">
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Date)
@@ -40,7 +39,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="TripId" />
         <input type="hidden" asp-for="VehicleId" />
-        <input type="submit" value="Delete" class="btn btn-danger" />
-        <p class="my-4"><a asp-action="Index">Back to List</a></p>
+        <component type="typeof(TripsButtonsDeleteAndCancel)" render-mode="ServerPrerendered" />
     </form>
 </div>

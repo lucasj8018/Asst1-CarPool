@@ -7,7 +7,10 @@
     <title>@ViewData["Title"] - CarPoolMvc</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
     <link rel="stylesheet" href="~/CarPoolMvc.styles.css" asp-append-version="true" />
+    <base href="~/" />
+    <component type="typeof(Microsoft.AspNetCore.Components.Web.HeadOutlet)" render-mode="ServerPrerendered" />
 </head>
 
 <body style="background-color: #f0eded;">
@@ -24,10 +27,12 @@
                     {
                         @if (User.IsInRole("Admin"))
                         {
-                            <li><a asp-area="" asp-controller="Users" asp-action="Index"
-                                    class="nav-link px-2 text-white fs-5">Users</a></li>
+                            <li><a asp-area="" asp-controller="Roles" asp-action="Index"
+                                    class="nav-link px-2 text-white fs-5">Roles</a></li>
                             <li><a asp-area="" asp-controller="Members" asp-action="Index"
                                     class="nav-link px-2 text-white fs-5">Members</a></li>
+                            <li><a asp-area="" asp-controller="DriverRequests" asp-action="AdminApproval"
+                                    class="nav-link px-2 text-white fs-5">Driver Requests</a></li>
                         }
                         @if (User.IsInRole("Admin") || User.IsInRole("Owner"))
                         {
@@ -38,8 +43,17 @@
                         <li><a asp-area="" asp-controller="Trips" asp-action="Index"
                             class="nav-link px-2 text-white fs-5">Trips</a></li>
 
-                        <li><a asp-area="" asp-controller="Manifests" asp-action="Index"
-                                class="nav-link px-2 text-white fs-5">Manifests</a></li>
+                        @if (User.IsInRole("Passenger"))
+                        {
+                            <li><a asp-area="" asp-controller="DriverRequests" asp-action="DriverRequest"
+                                class="nav-link px-2 text-white fs-5">Driver Request</a></li>
+                        }
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("Owner"))
+                        {
+                            <li><a asp-area="" asp-controller="Manifests" asp-action="Index"
+                                class="nav-link px-2 text-white fs-5">Manifests</a></li>  
+                        }                              
                     }
                 </ul>
 
@@ -63,9 +77,11 @@
         </div>
         </div>
     </footer>
+    <script src="_framework/blazor.web.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

@@ -1,0 +1,35 @@
+@model CarPoolLibrary.Models.Member
+
+@{
+    ViewData["Title"] = Model?.DriverRequest == true ? "Your request has been sent" : "Wanna become a driver?";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model != null && !Model.DriverRequest)
+{
+    <form asp-action="RequestDriverRole" asp-controller="DriverRequests">
+        <input type="hidden" asp-for="MemberId" />
+        <div>
+            <h3>Please confirm sending driver role change request.</h3>
+            <label asp-for="DriverRequest" style="font-size: larger;">Confirmation</label>
+            <input id="driverRequestCheckbox" asp-for="DriverRequest" type="checkbox" onchange="toggleSubmitButton()" />
+        </div>
+        <input id="submitButton" type="submit" value="Submit Request" disabled class="btn btn-success"/>
+    </form>
+
+    <script>
+        function toggleSubmitButton() {
+            var checkbox = document.getElementById('driverRequestCheckbox');
+            var submitButton = document.getElementById('submitButton');
+            submitButton.disabled = !checkbox.checked;
+        }
+    </script>
+}
+else
+{
+    <p style="font-size: larger;">Your request to become a driver has been sent. We will review it and get back to you soon.</p>
+    <form asp-action="Index" asp-controller="Home">
+        <input type="submit" value="Go Back" class="btn btn-success"/>
+    </form>
+}

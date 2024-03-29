@@ -4,52 +4,53 @@
     ViewData["Title"] = "Add a Vehicle";
 }
 
+<link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
+
 <h1>@ViewData["Title"]</h1>
 
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Add">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group my-2">
+                <label asp-for="MemberId" class="control-label">Owner</label>
+                <select asp-for="MemberId" class ="form-control" asp-items="@(ViewData["Owners"] as SelectList)"></select>
+            </div>
+            <div class="form-group my-2">
                 <label asp-for="Model" class="control-label"></label>
                 <input asp-for="Model" class="form-control" />
                 <span asp-validation-for="Model" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group my-2">
                 <label asp-for="Make" class="control-label"></label>
                 <input asp-for="Make" class="form-control" />
                 <span asp-validation-for="Make" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group my-2">
                 <label asp-for="Year" class="control-label"></label>
                 <input asp-for="Year" class="form-control" />
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group my-2">
+                <label asp-for="VehicleType" class="control-label"></label>
+                <select asp-for="VehicleType" asp-items="@(ViewData["DefaultVehicleTypes"] as SelectList)" 
+                    class="form-control" required >
+                    <option value="">Select Vehicle Type</option>
+                </select>
+                <span asp-validation-for="VehicleType" class="text-danger"></span>
+            </div>
+            <div class="form-group my-2">
                 <label asp-for="NumberOfSeats" class="control-label"></label>
                 <input asp-for="NumberOfSeats" class="form-control" />
                 <span asp-validation-for="NumberOfSeats" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="VehicleType" class="control-label">Vehicle Type</label>
-                <input asp-for="VehicleType" class="form-control" />
-                <span asp-validation-for="VehicleType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MemberId" class="control-label">Member</label>
-                <select asp-for="MemberId" class ="form-control" asp-items="ViewBag.MemberId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Add" class="btn btn-primary" />
+            <div class="form-group my-4">
+                <component type="typeof(VehiclesButtonsAddAndCancel)" render-mode="ServerPrerendered" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

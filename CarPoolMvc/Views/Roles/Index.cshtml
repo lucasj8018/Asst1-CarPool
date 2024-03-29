@@ -1,0 +1,9 @@
+@model IEnumerable<CarPoolLibrary.Models.UserWithRole>
+
+@{
+    ViewData["Title"] = "Role Management";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<component type="typeof(RolesDataList)" render-mode="ServerPrerendered" />

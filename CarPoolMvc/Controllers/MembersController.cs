@@ -17,12 +17,12 @@ namespace CarPoolMvc.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly ILogger<UsersController> _logger;
+        private readonly ILogger<RolesController> _logger;
 
-        public MembersController(ApplicationDbContext context, 
-            UserManager<IdentityUser> userManager, 
+        public MembersController(ApplicationDbContext context,
+            UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            ILogger<UsersController> logger)
+            ILogger<RolesController> logger)
         {
             _context = context;
             _userManager = userManager;
@@ -31,14 +31,14 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Members
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Members!.ToListAsync());
         }
 
         // GET: Members/Details/5
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -57,10 +57,10 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Members/Create
-        [Authorize(Roles="Admin, Passenger")]
+        [Authorize(Roles = "Admin, Passenger")]
         public IActionResult Create()
         {
-            
+
             return View();
         }
 
@@ -69,11 +69,15 @@ namespace CarPoolMvc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles="Admin, Passenger")]
+        [Authorize(Roles = "Admin, Passenger")]
         public async Task<IActionResult> Create([Bind("MemberId,FirstName,LastName,Email,Mobile,Street,City,PostalCode,Country,Created,Modified,CreatedBy,ModifiedBy")] Member member)
         {
             if (ModelState.IsValid)
             {
+                // Add create by, modified by info
+                var user = await _userManager.GetUserAsync(User);
+                member.CreatedBy = user!.Id;
+                member.ModifiedBy = user!.Id;
                 _context.Add(member);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
@@ -82,7 +86,7 @@ namespace CarPoolMvc.Controllers
         }
 
         // GET: Members/Edit/5
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -103,7 +107,7 @@ namespace CarPoolMvc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("MemberId,FirstName,LastName,Email,Mobile,Street,City,PostalCode,Country,Created,Modified,CreatedBy,ModifiedBy")] Member member)
         {
             if (id != member.MemberId)
@@ -115,6 +119,10 @@ namespace CarPoolMvc.Controllers
             {
                 try
                 {
+                    // Add modified by info
+                    var user = await _userManager.GetUserAsync(User);
+                    member.ModifiedBy = user!.Id;
+                    member.Modified = DateTime.Now;
                     _context.Update(member);
                     await _context.SaveChangesAsync();
                 }
@@ -155,7 +163,7 @@ namespace CarPoolMvc.Controllers
         // POST: Members/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var member = await _context.Members!.FindAsync(id);

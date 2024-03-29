@@ -1,0 +1,6 @@
+@inject NavigationManager NavigationManager
+
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem" Wrap="FlexWrap.Wrap">
+  <RadzenButton ButtonType="ButtonType.Submit" Text="Delete" ButtonStyle="ButtonStyle.Danger" />
+  <RadzenButton Text="Cancel" Variant="Variant.Outlined" Click="@(() => NavigationManager.NavigateTo("/Manifests"))" />
+</RadzenStack>
