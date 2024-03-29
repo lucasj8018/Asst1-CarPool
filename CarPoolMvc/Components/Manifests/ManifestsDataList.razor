@@ -8,6 +8,12 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
+@if (manifests == null || !manifests.Any())
+{
+    <p>No data available.</p>
+}
+else
+{
 <RadzenDataList AllowVirtualization="@allowVirtualization"
   Style="@(allowVirtualization ? "height:400px;overflow:auto;" : "")" WrapItems="@(!allowVirtualization)"
   AllowPaging="@(!allowVirtualization)" Data="@manifests" TItem="CarPoolLibrary.Models.Manifest" PageSize="5"
@@ -80,7 +86,7 @@
     </RadzenCard>
   </Template>
 </RadzenDataList>
-
+}
 
 @code {
   bool allowVirtualization = false; // a RadzenDataList property

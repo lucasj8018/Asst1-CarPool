@@ -1,15 +1,19 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarPoolLibrary.Models;
 public class Member
 {
     [Key]
+    [Display(Name = "Member Id")]
     public int MemberId { get; set; }
 
     [Required]
+    [Display(Name = "First Name")]
     public string? FirstName { get; set; }
 
     [Required]
+    [Display(Name = "Last Name")]
     public string? LastName { get; set; }
 
     [EmailAddress]
@@ -31,7 +35,7 @@ public class Member
     public string? PostalCode { get; set; }
 
     [Required]
-    public string? Country { get; set; }
+    public string? Country { get; set; } = "Canada";
 
     public DateTime? Created { get; set; } = DateTime.Now;
 
@@ -45,4 +49,7 @@ public class Member
 
     // Stores the trips that the member is registered for
     public List<Trip>? Trips { get; } = [];
+
+    [NotMapped]
+    public string FullName => $"{FirstName} {LastName}";
 }

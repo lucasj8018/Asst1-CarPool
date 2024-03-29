@@ -6,25 +6,26 @@ namespace CarPoolLibrary.Models;
 public class Manifest
 {
     [Key]
+    [Display(Name = "Manifest Id")]
     public int ManifestId { get; set; }
 
     [Required]
+    [Display(Name = "Member Id")]
     public int MemberId { get; set; }
 
     [Required]
-    public int? TripId { get; set; }
-    
-    public string? DestinationAddress { get; set; }
+    [Display(Name = "Trip Id")]
+    public int TripId { get; set; }
 
     public string? Notes { get; set; }
 
-    public DateTime? Created { get; set; } = DateTime.Now;
+    public DateTime Created { get; set; } = DateTime.Now;
 
-    public DateTime? Modified { get; set; } = DateTime.Now;
+    public DateTime Modified { get; set; } = DateTime.Now;
 
-    public string? CreatedBy { get; set; } = "System";
+    public string CreatedBy { get; set; } = "System";
 
-    public string? ModifiedBy { get; set; } = "System";
+    public string ModifiedBy { get; set; } = "System";
 
     [ForeignKey("MemberId")]
     public Member? Member { get; set; }

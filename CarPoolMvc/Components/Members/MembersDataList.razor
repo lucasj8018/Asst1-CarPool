@@ -2,6 +2,12 @@
 @inject CarPoolLibrary.Data.ApplicationDbContext dbContext
 @inject NavigationManager NavigationManager
 
+@if (members == null || !members.Any())
+{
+    <p>No members available.</p>
+}
+else
+{
 <RadzenDataList AllowVirtualization="@allowVirtualization"
   Style="@(allowVirtualization ? "height:400px;overflow:auto;" : "")" WrapItems="@(!allowVirtualization)"
   AllowPaging="@(!allowVirtualization)" Data="@members" TItem="CarPoolLibrary.Models.Member" PageSize="5"
@@ -51,7 +57,7 @@
     </RadzenCard>
   </Template>
 </RadzenDataList>
-
+}
 
 @code {
   bool allowVirtualization = false; // a RadzenDataList property

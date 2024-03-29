@@ -8,6 +8,12 @@
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<IdentityUser> UserManager
 
+@if (trips == null || !trips.Any())
+{
+    <p>No trips available.</p>
+}
+else
+{
 <RadzenDataList AllowVirtualization="@allowVirtualization"
   Style="@(allowVirtualization ? "height:400px;overflow:auto;" : "")" WrapItems="@(!allowVirtualization)"
   AllowPaging="@(!allowVirtualization)" Data="@trips" TItem="CarPoolLibrary.Models.Trip" PageSize="5"
@@ -19,7 +25,7 @@
         @* Display the trip ID *@
         <RadzenColumn Size="1" Class="rz-p-4">
           <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Text">
-            ID # @(trips.TripId.ToString())
+            ID # @trips.TripId.ToString()
           </RadzenBadge>
 
           <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mt-2">Driver</RadzenText>
@@ -35,53 +41,83 @@
           <RadzenText TextStyle="TextStyle.Body2">@trips.Time</RadzenText>
         </RadzenColumn>
 
-        @* Display the vehicle info *@
-        <RadzenColumn Size="2" Class="rz-p-4">
-          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Vehicle</RadzenText>
-          <RadzenText TextStyle="TextStyle.Body2">@trips.Vehicle!.Make @trips.Vehicle!.Model</RadzenText>
-
-          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mt-2">Seats</RadzenText>
-          <RadzenText TextStyle="TextStyle.Body2">@trips.Vehicle!.NumberOfSeats</RadzenText>
-        </RadzenColumn>
-
         @* Display the destination and meeting address *@
         <RadzenColumn Size="3" Class="rz-p-4">
-          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Destination</RadzenText>
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Destination Address</RadzenText>
           <RadzenText TextStyle="TextStyle.Body2">@trips.Destination</RadzenText>
 
-          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mt-2">Meeting Address</RadzenText>
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mt-2">Meeting Address
+          </RadzenText>
           <RadzenText TextStyle="TextStyle.Body2">@trips.MeetingAddress</RadzenText>
         </RadzenColumn>
 
-        @* Edit or Delete a trip (Admin or Owner only) *@
-        <AuthorizeView Roles="Admin, Owner">
-          <RadzenStack Orientation="Orientation.Horizontal" Class="rz-p-4" Gap="10" JustifyContent="JustifyContent.End">
-            <RadzenButton Text="Edit" Click="@(() => Edit(@trips.TripId, @trips.Vehicle!.VehicleId))"
-              Variant="Variant.Outlined" />
-            <RadzenButton Text="Delete" Click="@(() => Delete(@trips.TripId, @trips.Vehicle!.VehicleId))"
-              Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" />
-          </RadzenStack>
-        </AuthorizeView>
+        @* Display the vehicle info *@
+        <RadzenColumn Size="2" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Driver</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@trips.Vehicle!.Member!.FirstName @trips.Vehicle!.Member!.LastName
+          </RadzenText>
 
-        <AuthorizeView Roles="Admin, Passenger">
-          <RadzenStack Orientation="Orientation.Horizontal" Class="rz-p-4" Gap="10" JustifyContent="JustifyContent.End">
-			@if (IsUserAssociatedWithTrip(trips.TripId)) 
-			{
-				<RadzenButton Text="Unregister" Click="@(() => Unregister(@trips.TripId))"
-              		ButtonStyle="ButtonStyle.Success" Variant="Variant.Outlined" />
-			}
-			else 
-			{
-				<RadzenButton Text="Register" Click="@(() => Register(@trips.TripId))"
-              		Variant="Variant.Outlined" />
-			}
-          </RadzenStack>
-        </AuthorizeView>
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0 rz-mt-2">Vehicle</RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">@trips.Vehicle!.Make @trips.Vehicle!.Model</RadzenText>
+        </RadzenColumn>
+
+        @* Display the available seats *@
+        <RadzenColumn Size="2" Class="rz-p-4">
+          <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Available Seats
+          </RadzenText>
+          <RadzenText TextStyle="TextStyle.Body2">
+            @CalculateAvailableSeats(trips) / @trips.Vehicle!.NumberOfSeats
+          </RadzenText>
+        </RadzenColumn>
+
+
+        @* Group all the buttons *@
+        <RadzenColumn Size="2">
+
+          
+            <RadzenStack Orientation="Orientation.Vertical" Class="rz-p-4" Gap="10"
+              JustifyContent="JustifyContent.End" >
+
+              @* Register and unregister buttons *@
+              <AuthorizeView Roles="Admin, Passenger">
+              @if (IsUserAssociatedWithTrip(trips.TripId))
+              {
+                <RadzenButton Text="Unregister" Click="@(() => Unregister(@trips.TripId))"
+                  ButtonStyle="ButtonStyle.Success" />
+              }
+              else
+              {
+                @if (IsSeatAvailable(trips))
+                {
+                  <RadzenButton Text="Register" Click="@(() => Register(@trips.TripId))"
+                    ButtonStyle="ButtonStyle.Primary"/>
+                }
+                else
+                {
+                  <RadzenButton Text="Register" Disabled="true"/>
+                }
+              }
+              </AuthorizeView>
+
+              @* Edit or Delete a trip (Admin or Owner only) *@
+              <AuthorizeView Roles="Admin, Owner">
+                <RadzenStack Orientation="Orientation.Vertical"
+                  JustifyContent="JustifyContent.End">
+                  <RadzenButton Text="Edit" Click="@(() => Edit(@trips.TripId, @trips.Vehicle!.VehicleId))"
+                    Variant="Variant.Outlined" />
+                  <RadzenButton Text="Delete" Click="@(() => Delete(@trips.TripId, @trips.Vehicle!.VehicleId))"
+                    Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" />
+                </RadzenStack>
+              </AuthorizeView>
+            </RadzenStack>
+
+        </RadzenColumn>
 
       </RadzenRow>
     </RadzenCard>
   </Template>
 </RadzenDataList>
+}
 
 
 @code {
@@ -91,7 +127,7 @@
   protected override async Task OnInitializedAsync()
   {
     await base.OnInitializedAsync();
-    trips = dbContext.Trips!.Include(t => t.Vehicle).Include(t => t.Members).ToList();
+    trips = dbContext.Trips!.Include(t => t.Vehicle!.Member).Include(t => t.Members).ToList();
   }
 
   private void Edit(int tripId, int vehicleId)
@@ -111,19 +147,30 @@
 
   private void Unregister(int tripId)
   {
-	NavigationManager.NavigateTo($"/Trips/Unregister/{tripId}");
+    NavigationManager.NavigateTo($"/Trips/Unregister/{tripId}");
   }
 
-	private bool IsUserAssociatedWithTrip(int tripId)
-	{
-		var user = UserManager.GetUserAsync((ClaimsPrincipal)AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User).Result;
-		var email = user?.Email;
-		var member = dbContext.Members?.FirstOrDefault(m => m.Email == email);
-		var userId = member?.MemberId;
+  private int CalculateAvailableSeats(Trip trip)
+  {
+    var registeredMembers = trip.Members.Count();
+    return trip.Vehicle!.NumberOfSeats - registeredMembers ?? 0;
+  }
 
-		return dbContext.Trips!
-				.Include(t => t.Members)
-				.Any(t => t.TripId == tripId && t.Members!.Any(m => m.MemberId == userId));
-	}
+  private bool IsSeatAvailable(Trip trip)
+  {
+    return CalculateAvailableSeats(trip) > 0;
+  }
+
+  private bool IsUserAssociatedWithTrip(int tripId)
+  {
+    var user = UserManager.GetUserAsync((ClaimsPrincipal)AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User).Result;
+    var email = user?.Email;
+    var member = dbContext.Members?.FirstOrDefault(m => m.Email == email);
+    var userId = member?.MemberId;
+
+    return dbContext.Trips!
+    .Include(t => t.Members)
+    .Any(t => t.TripId == tripId && t.Members!.Any(m => m.MemberId == userId));
+  }
 
 }

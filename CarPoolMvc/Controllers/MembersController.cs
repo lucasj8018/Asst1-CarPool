@@ -74,23 +74,10 @@ namespace CarPoolMvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                member.Created = DateTime.Now;
-                member.Modified = DateTime.Now;
-                var firstName = member.FirstName;
-                var lastName = member.LastName;
-
+                // Add create by, modified by info
                 var user = await _userManager.GetUserAsync(User);
-                var email = user?.Email;
-                var loggedInMember = await _context.Members!.FirstOrDefaultAsync(m => m.Email == email);
-                if (loggedInMember != null)
-                {
-                    firstName = loggedInMember.FirstName;
-                    lastName = loggedInMember.LastName;
-                }
-
-                member.CreatedBy = $"{firstName} {lastName}";
-                member.ModifiedBy = $"{firstName} {lastName}";
-
+                member.CreatedBy = user!.Id;
+                member.ModifiedBy = user!.Id;
                 _context.Add(member);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
@@ -132,23 +119,12 @@ namespace CarPoolMvc.Controllers
             {
                 try
                 {
+                    // Add modified by info
                     var user = await _userManager.GetUserAsync(User);
-                    var email = user?.Email;
-                    var loggedInMember = await _context.Members!.FirstOrDefaultAsync(m => m.Email == email);
-                    if (loggedInMember == null)
-                    {
-                        return RedirectToAction("Create", "Members");
-                    }
-                    else
-                    {
-                        var firstName = loggedInMember.FirstName;
-                        var lastName = loggedInMember.LastName;
-
-                        member.ModifiedBy = $"{firstName} {lastName}";
-                        member.Modified = DateTime.Now;
-                        _context.Update(member);
-                        await _context.SaveChangesAsync();
-                    }
+                    member.ModifiedBy = user!.Id;
+                    member.Modified = DateTime.Now;
+                    _context.Update(member);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
